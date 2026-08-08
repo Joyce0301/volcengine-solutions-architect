@@ -1,18 +1,18 @@
 {
   "name": "volcengine-architecture",
   "version": "0.1.0",
-  "description": "Volcengine Architecture plugin",
+  "description": "Evidence-backed Volcengine architecture design for Codex.",
   "author": {
-    "name": "Local developer"
+    "name": "Volcengine Architecture"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Volcengine Architecture",
-    "shortDescription": "Use Volcengine Architecture in Codex.",
-    "longDescription": "Volcengine Architecture adds a local Codex plugin scaffold.",
-    "developerName": "Local developer",
+    "shortDescription": "Design evidence-backed Volcengine architectures.",
+    "longDescription": "Design evidence-backed Volcengine architectures in Codex.",
+    "developerName": "Volcengine Architecture",
     "category": "Productivity",
     "capabilities": [],
-    "defaultPrompt": "Help me use Volcengine Architecture."
+    "defaultPrompt": "Use $design-volcengine-architecture to turn my business requirements into a Volcengine architecture."
   }
 }
