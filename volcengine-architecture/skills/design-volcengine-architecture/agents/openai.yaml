@@ -1,0 +1,4 @@
+interface:
+  display_name: "Volcengine Architecture Designer"
+  short_description: "Design evidence-backed Volcengine architectures"
+  default_prompt: "Use $design-volcengine-architecture to turn my business requirements into a Volcengine architecture."
