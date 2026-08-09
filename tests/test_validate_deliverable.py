@@ -18,7 +18,11 @@ spec.loader.exec_module(validator)
 validate_markdown = validator.validate_markdown
 
 
-VALID_MARKDOWN = """# Architecture proposal
+VALID_MARKDOWN = """## Requirements gap check
+
+- Facts: test fixture.
+- Open items: no critical open items.
+- Assumptions: test fixture.
 
 ## Executive summary
 Summary.
@@ -83,6 +87,30 @@ Evidence: 2
 class ValidateDeliverableTests(unittest.TestCase):
     def test_valid_complete_deliverable_has_no_errors(self):
         assert validate_markdown(VALID_MARKDOWN) == []
+
+    def test_requires_requirements_gap_check_as_first_visible_content(self):
+        text = VALID_MARKDOWN.replace(
+            "## Requirements gap check",
+            "# Architecture proposal\n\n## Requirements gap check",
+            1,
+        )
+        assert "first visible content must be: ## Requirements gap check" in validate_markdown(text)
+
+    def test_requires_exactly_one_production_readiness_line(self):
+        without_readiness = VALID_MARKDOWN.replace("Production readiness: NOT READY\n", "")
+        assert (
+            "expected exactly one Production readiness line with READY or NOT READY"
+            in validate_markdown(without_readiness)
+        )
+
+        duplicated_readiness = VALID_MARKDOWN.replace(
+            "Production readiness: NOT READY",
+            "Production readiness: NOT READY\nProduction readiness: NOT READY",
+        )
+        assert (
+            "expected exactly one Production readiness line with READY or NOT READY"
+            in validate_markdown(duplicated_readiness)
+        )
 
     def test_reports_missing_required_section(self):
         text = VALID_MARKDOWN.replace("## Risk and validation plan", "## Removed")

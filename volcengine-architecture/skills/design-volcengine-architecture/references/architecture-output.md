@@ -1,6 +1,6 @@
 # Architecture Output Contract
 
-Produce one Markdown proposal with the following twelve `##` sections, in this order. Use conditional wording where `ArchitectureBrief.open_questions` or `ArchitectureBrief.assumptions` affects a decision.
+Produce one Markdown proposal whose first visible content is exactly `## Requirements gap check`, followed by the twelve proposal `##` sections below in order. Leading blank lines and HTML comments are ignored by the validator; no title, summary, question, or other visible content may appear before `## Requirements gap check`. Use conditional wording where `ArchitectureBrief.open_questions` or `ArchitectureBrief.assumptions` affects a decision.
 
 ## Required sections
 
@@ -51,4 +51,4 @@ Evidence: 0
 Production readiness: NOT READY
 ```
 
-`Production readiness: READY` is permitted only when every one of the six scores equals `2` and there is no critical open item. Otherwise write `Production readiness: NOT READY` and identify the blocking item or condition.
+Write exactly one `Production readiness: READY` or `Production readiness: NOT READY` line. `Production readiness: READY` is permitted only when every one of the six scores equals `2` and there is no critical open item. Otherwise write `Production readiness: NOT READY` and identify the blocking item or condition.

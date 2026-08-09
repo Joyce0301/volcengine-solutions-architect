@@ -23,8 +23,24 @@ REQUIRED_SECTIONS = (
 SCORE_NAMES = ("Requirements", "Architecture", "Security", "Reliability", "Cost", "Evidence")
 
 
+def first_visible_line(text: str) -> str:
+    remainder = text
+    while True:
+        stripped = remainder.lstrip()
+        if stripped.startswith("<!--"):
+            end = stripped.find("-->")
+            if end == -1:
+                return stripped.splitlines()[0] if stripped.splitlines() else ""
+            remainder = stripped[end + 3 :]
+            continue
+        return stripped.splitlines()[0] if stripped.splitlines() else ""
+
+
 def validate_markdown(text: str) -> list[str]:
     errors: list[str] = []
+    if first_visible_line(text) != "## Requirements gap check":
+        errors.append("first visible content must be: ## Requirements gap check")
+
     for section in REQUIRED_SECTIONS:
         if not re.search(rf"^##\s+{re.escape(section)}\s*$", text, re.MULTILINE):
             errors.append(f"missing section: {section}")
@@ -67,7 +83,11 @@ def validate_markdown(text: str) -> list[str]:
         if name not in scores:
             errors.append(f"missing completeness score: {name}")
 
-    if re.search(r"^Production readiness:\s*READY\s*$", text, re.MULTILINE):
+    readiness_matches = re.findall(r"^Production readiness:\s*(READY|NOT READY)\s*$", text, re.MULTILINE)
+    if len(readiness_matches) != 1:
+        errors.append("expected exactly one Production readiness line with READY or NOT READY")
+
+    if readiness_matches == ["READY"]:
         if len(scores) != len(SCORE_NAMES) or any(value != 2 for value in scores.values()):
             errors.append("READY requires all completeness scores to equal 2")
         text_without_negated_items = re.sub(

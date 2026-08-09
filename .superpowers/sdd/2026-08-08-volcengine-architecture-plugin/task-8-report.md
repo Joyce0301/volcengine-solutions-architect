@@ -274,3 +274,102 @@ No live Volcengine resources changed. Task 8 commands were local-only repository
 
 Report committed as requested once validation evidence was complete and generated cache artifacts were removed.
 
+## Final Contract Fix Follow-Up
+
+### Scope
+
+Whole-branch review follow-up enforced the final architecture output contract in the validator:
+
+- First visible content must be exactly `## Requirements gap check`; leading blank lines and HTML comments are ignored.
+- Exactly one `Production readiness: READY` or `Production readiness: NOT READY` line is required.
+- Existing `READY` gates remain unchanged: all six scores must be `2` and no critical open item may remain.
+
+### RED Evidence
+
+Command:
+
+```bash
+python3 -m unittest tests.test_validate_deliverable.ValidateDeliverableTests -v
+```
+
+Result before implementation: exit 1.
+
+```text
+Ran 14 tests in 0.005s
+
+FAILED (failures=2)
+```
+
+Expected failing tests:
+
+```text
+test_requires_exactly_one_production_readiness_line ... FAIL
+test_requires_requirements_gap_check_as_first_visible_content ... FAIL
+```
+
+### GREEN Evidence
+
+Targeted validator tests:
+
+```bash
+python3 -m unittest tests.test_validate_deliverable.ValidateDeliverableTests -v
+```
+
+Result: exit 0.
+
+```text
+Ran 14 tests in 0.004s
+
+OK
+```
+
+Full unittest:
+
+```bash
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+```
+
+Result: exit 0.
+
+```text
+Ran 14 tests in 0.004s
+
+OK
+```
+
+Six forward validators:
+
+```bash
+for file in tests/forward/ai-agent.md tests/forward/cloud-native.md tests/forward/intelligent-service.md tests/forward/media.md tests/forward/realtime-data.md tests/forward/regulated-finance.md; do
+  printf '%s\n' "$file"
+  python3 volcengine-architecture/skills/design-volcengine-architecture/scripts/validate-deliverable.py "$file"
+done
+```
+
+Result: exit 0; all six returned `VALID`.
+
+Skill quick validate with PyYAML venv:
+
+```bash
+/tmp/volcengine-skill-validate-venv/bin/python /Users/juice/.codex/skills/.system/skill-creator/scripts/quick_validate.py volcengine-architecture/skills/design-volcengine-architecture
+```
+
+Result: exit 0, `Skill is valid!`.
+
+Plugin validate with PyYAML venv:
+
+```bash
+/tmp/volcengine-skill-validate-venv/bin/python /Users/juice/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py volcengine-architecture
+```
+
+Result: exit 0, `Plugin validation passed`.
+
+Whitespace:
+
+```bash
+git diff --check
+```
+
+Result: exit 0 with no output.
+
+Trailing-whitespace scan found pre-existing Markdown hard-break spaces in `docs/superpowers/specs/2026-08-08-volcengine-architecture-skill-design.md` and `tests/baselines/ai-agent.md`; these were left unchanged to avoid altering rendered baseline/spec semantics.
