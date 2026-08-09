@@ -1,1 +1,6 @@
 .worktrees/
+docs/local-architecture-artifacts/
+docs/*.png
+docs/*.pdf
+docs/*.svg
+docs/architecture-diagram-philosophy.md

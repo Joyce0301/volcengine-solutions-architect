@@ -4,14 +4,6 @@
 
 GitHub: <https://github.com/Joyce0301/volcengine-solutions-architect>
 
-## 架构图
-
-当前智能客服 Agent 的逻辑架构图：
-
-![智能客服 Agent 高可用逻辑架构](docs/volcengine-customer-agent-architecture.png)
-
-设计哲学记录在：[architecture-diagram-philosophy.md](docs/architecture-diagram-philosophy.md)
-
 ## 安装
 
 在 Codex 的插件安装入口中，从 GitHub 安装：
