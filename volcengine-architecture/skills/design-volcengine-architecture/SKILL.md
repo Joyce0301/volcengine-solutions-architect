@@ -24,17 +24,17 @@ Design Volcengine architectures from business requirements. Start with gaps, sep
    - `PRIVATE_NETWORK`, `DATA_RESIDENCY`, `REGULATED`, or public ingress/security review -> [references/networking-security.md](references/networking-security.md)
    - `MEDIA` or `EDGE` -> [references/media-edge.md](references/media-edge.md)
 6. Verify dynamic facts at runtime before relying on them: price, region, specification, quota, SLA, version status, promotion, exact limits, or current model/product availability. Use official Volcengine sources where possible, cite the URL, and write `Retrieved: YYYY-MM-DD`. If network access is unavailable or the page cannot be reached, mark the fact as unverified and keep it in open items.
-7. If subagents are available and the routing matrix calls for role work, read [references/subagent-contracts.md](references/subagent-contracts.md) and dispatch the relevant role contracts. If subagents are not available, run the same contracts serially in the main context. The main Skill owns conflict resolution and the final answer.
+7. If the routing matrix calls for role work, read [references/subagent-contracts.md](references/subagent-contracts.md), then choose execution mode. Dispatch the relevant contracts when subagents are available; otherwise run the same contracts serially in the main context. The main Skill owns conflict resolution and the final answer.
 8. Integrate domain findings into one architecture. Include alternatives and switch conditions for every material product recommendation or topology choice.
 9. Review the candidate explicitly for security, reliability, observability, and cost. When `REGULATED`, `HIGH_AVAILABILITY`, or `DISASTER_RECOVERY` is present, include an independent security/reliability review result. When `COST_SENSITIVE` or material scale is supplied, include FinOps findings.
 10. Render the final proposal using the exact twelve-section output below. Read [references/architecture-output.md](references/architecture-output.md) for field details and scoring rules.
 11. For a Markdown file deliverable, run:
 
-```bash
-python3 volcengine-architecture/skills/design-volcengine-architecture/scripts/validate-deliverable.py <markdown_file>
+```text
+python3 "<SKILL_ROOT>/scripts/validate-deliverable.py" <markdown_file>
 ```
 
-Fix structural validator errors before returning the file. Passing the validator does not prove the architecture is correct; it proves required evidence and output slots are present.
+Resolve `<SKILL_ROOT>` at runtime to the absolute directory containing this `SKILL.md`, using the host platform's native path handling; do not assume the process is running from the repository or plugin directory. Fix structural validator errors before returning the file. Passing the validator does not prove the architecture is correct; it proves required evidence and output slots are present.
 
 ## Question Rules
 
