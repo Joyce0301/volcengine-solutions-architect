@@ -1,0 +1,11 @@
+# Chromatic Grounding
+
+The diagram treats architecture as a quiet instrument: a small number of precise shapes carry the weight of the system, while generous negative space keeps the reasoning legible. Each layer is a distinct plane—channel, orchestration, knowledge, model, verification, and persistence—so the eye can read the system as a sequence rather than a tangle. Connections are disciplined paths with deliberate bends, never decorative noise.
+
+Color is used as a semantic register. Ink-blue marks the trusted request path, warm amber marks knowledge and evidence, violet marks model synthesis, and jade marks verification and operational truth. The background is a cool paper field with faint coordinate lines, suggesting a specimen from an imaginary discipline that studies reliable intelligence. The palette is calibrated, restrained, and meticulously crafted so that emphasis arrives through contrast instead of ornament.
+
+Scale establishes rhythm: the user-facing edge is compact, the orchestration spine is the visual anchor, and the evidence stores form a quiet foundation. Small monospaced annotations behave like laboratory labels—minimal, factual, and integrated into the geometry. Text remains sparse and essential; the spatial relationships do the explaining. A thin “truth boundary” surrounding the knowledge and validation layers makes the central idea visible without requiring a paragraph.
+
+The composition is balanced around a single left-to-right flow, with asynchronous knowledge ingestion placed below the synchronous answer path. Repeated corner radii, consistent stroke weights, aligned baselines, and carefully tuned gaps make every module feel like part of one instrument. The final work should look painstakingly refined: the product of deep expertise, countless small adjustments, and master-level execution rather than a quick diagram assembled from defaults.
+
+Craftsmanship is the governing ethic. Every line should terminate cleanly, every label should breathe, and every color transition should be intentional. The artifact is designed to reward a sustained look: first the route, then the boundaries, then the quiet evidence trail underneath. It should feel meticulously labored over by someone at the top of their field—an operational map that is also a composed visual object.
