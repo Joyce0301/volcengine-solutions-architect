@@ -109,6 +109,8 @@ Skill 通常按以下顺序工作：
 7. 对价格、规格、配额、SLA、可用地域、版本状态等动态信息要求官方证据和查询日期。
 8. 输出 `Production readiness: READY` 或 `Production readiness: NOT READY`，并说明未就绪原因。
 
+完成架构关键问题澄清后，Skill 会把最终架构结果、产品依据、数据流、部署与容灾细节、风险和验收标准写入 Markdown 报告。默认路径为 `reports/volcengine-architecture-report.md`；也可以在请求中指定报告路径。报告是交付源文件，聊天消息只返回摘要和报告绝对路径。
+
 除最前面的需求缺口检查外，最终方案包含以下十二个部分：
 
 1. Executive summary

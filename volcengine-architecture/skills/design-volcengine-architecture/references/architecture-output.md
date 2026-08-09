@@ -1,6 +1,6 @@
 # Architecture Output Contract
 
-Produce one Markdown proposal whose first visible content is exactly `## Requirements gap check`, followed by the twelve proposal `##` sections below in order. Leading blank lines and HTML comments are ignored by the validator; no title, summary, question, or other visible content may appear before `## Requirements gap check`. Use conditional wording where `ArchitectureBrief.open_questions` or `ArchitectureBrief.assumptions` affects a decision.
+Produce one self-contained Markdown report whose first visible content is exactly `## Requirements gap check`, followed by the twelve proposal `##` sections below in order. The default report path is `reports/volcengine-architecture-report.md` unless the caller supplies another path. Leading blank lines and HTML comments are ignored by the validator; no title, summary, question, or other visible content may appear before `## Requirements gap check`. Use conditional wording where `ArchitectureBrief.open_questions` or `ArchitectureBrief.assumptions` affects a decision.
 
 ## Required sections
 

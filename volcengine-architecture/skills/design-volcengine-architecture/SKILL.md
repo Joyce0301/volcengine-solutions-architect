@@ -30,13 +30,14 @@ Design Volcengine architectures from business requirements. Start with gaps, sep
 8. Integrate domain findings into one architecture. Include alternatives and switch conditions for every material product recommendation or topology choice.
 9. Review the candidate explicitly for security, reliability, observability, and cost. When `REGULATED`, `HIGH_AVAILABILITY`, or `DISASTER_RECOVERY` is present, include an independent security/reliability review result. When `COST_SENSITIVE` or material scale is supplied, include FinOps findings.
 10. Render the final proposal using the exact twelve-section output below. Read [references/architecture-output.md](references/architecture-output.md) for field details and scoring rules.
-11. For a Markdown file deliverable, run:
+11. Read [references/report-contract.md](references/report-contract.md). When architecture-changing question rounds are complete, write the final architecture result and all supporting details to `reports/volcengine-architecture-report.md` (or the caller-requested report path). The report is the source of truth; do not return a completed architecture only in chat without creating the report.
+12. For the report Markdown deliverable, run:
 
 ```text
 python3 "<SKILL_ROOT>/scripts/validate-deliverable.py" <markdown_file>
 ```
 
-Resolve `<SKILL_ROOT>` at runtime to the absolute directory containing this `SKILL.md`, using the host platform's native path handling; do not assume the process is running from the repository or plugin directory. Fix structural validator errors before returning the file. Passing the validator does not prove the architecture is correct; it proves required evidence and output slots are present.
+13. Resolve `<SKILL_ROOT>` at runtime to the absolute directory containing this `SKILL.md`, using the host platform's native path handling; do not assume the process is running from the repository or plugin directory. Fix structural validator errors before returning the report. Passing the validator does not prove the architecture is correct; it proves required evidence and output slots are present. Return the absolute report path and summarize final decisions.
 
 ## Question Rules
 
