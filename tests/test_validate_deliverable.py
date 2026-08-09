@@ -99,6 +99,10 @@ class ValidateDeliverableTests(unittest.TestCase):
         text = VALID_MARKDOWN + "\nThe SLA is 99.95%.\n"
         assert "dynamic fact lacks nearby official evidence and retrieval date" in validate_markdown(text)
 
+    def test_https_url_does_not_trigger_tps_detection(self):
+        text = VALID_MARKDOWN + "\nOfficial discovery: https://www.volcengine.com/docs/6401.\n"
+        assert validate_markdown(text) == []
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -10,10 +10,12 @@ Design Volcengine architectures from business requirements. Start with gaps, sep
 ## Core Workflow
 
 1. Read [references/intake-contract.md](references/intake-contract.md) before asking or designing. Normalize the request into `ArchitectureBrief` fields.
-2. Output a short requirements gap list before proposing products or topology:
+2. The first visible content in any architecture response must be this exact requirements gap block, before executive summary, questions, routing, products, topology, or recommendations:
+   - `## Requirements gap check`
    - `Known facts`
    - `Architecture-changing gaps`
    - `Assumptions if unanswered`
+   If the first response is an interview, still start with this block and then ask only gated questions. If proceeding to a full proposal, keep this block as a required preface, then render the exact twelve-section proposal below.
 3. Ask only questions that pass the question-impact gate from `intake-contract.md`. Ask at most two rounds. If the user cannot answer or the second round is complete, proceed with explicit assumptions and switch conditions.
 4. Read [references/routing-matrix.md](references/routing-matrix.md). Assign scenario, quality, and constraint labels with a one-line rationale for each label.
 5. Load [references/product-catalog.md](references/product-catalog.md), then load only the domain references selected by routing:
@@ -23,7 +25,7 @@ Design Volcengine architectures from business requirements. Start with gaps, sep
    - `DATABASE` or `STORAGE` -> [references/database-storage.md](references/database-storage.md)
    - `PRIVATE_NETWORK`, `DATA_RESIDENCY`, `REGULATED`, or public ingress/security review -> [references/networking-security.md](references/networking-security.md)
    - `MEDIA` or `EDGE` -> [references/media-edge.md](references/media-edge.md)
-6. Verify dynamic facts at runtime before relying on them: price, region, specification, quota, SLA, version status, promotion, exact limits, or current model/product availability. Use official Volcengine sources where possible, cite the URL, and write `Retrieved: YYYY-MM-DD`. If network access is unavailable or the page cannot be reached, mark the fact as unverified and keep it in open items.
+6. Verify dynamic facts at runtime before relying on them: price, region, specification, quota, SLA, version status, promotion, exact limits, or current model/product availability. If you assert a dynamic fact, the same paragraph or table cell must include an official `volcengine.com` URL and `Retrieved: YYYY-MM-DD` or `查询日期：YYYY-MM-DD`. If network access is unavailable or you choose not to verify, do not assert the dynamic value; state the field is `unknown` or `requires runtime verification` and keep it in open items without naming concrete prices, regions, quotas, SLAs, percentages, QPS/TPS values, exact limits, model availability, or specification values. Use validator-safe synonyms for unverified topology and commercial facts: `deployment location`, `commercial terms`, `capacity target`, `service target`, and `runtime verification required`. Write `secure HTTP` instead of `HTTPS` unless the same paragraph includes official evidence and retrieval date.
 7. If the routing matrix calls for role work, read [references/subagent-contracts.md](references/subagent-contracts.md), then choose execution mode. Dispatch the relevant contracts when subagents are available; otherwise run the same contracts serially in the main context. The main Skill owns conflict resolution and the final answer.
 8. Integrate domain findings into one architecture. Include alternatives and switch conditions for every material product recommendation or topology choice.
 9. Review the candidate explicitly for security, reliability, observability, and cost. When `REGULATED`, `HIGH_AVAILABILITY`, or `DISASTER_RECOVERY` is present, include an independent security/reliability review result. When `COST_SENSITIVE` or material scale is supplied, include FinOps findings.
@@ -53,6 +55,7 @@ Switch condition: If <different answer>, change <product/topology/flow/security/
 - B-level evidence: official Volcengine cases, whitepapers, and repositories.
 - C-level evidence: third-party material. Use only as a lead or noncritical practice support.
 - Product existence, core capability, architecture-critical limits, SLA, compliance, price, region, specification, quota, and version status require A-level evidence.
+- For unverified dynamic/current items, use validator-safe wording such as `Runtime verification required for product availability and commercial terms.` Avoid trigger words, including the literal words `region`, `地域`, `price`, `价格`, `SLA`, `quota`, `配额`, `QPS`, `TPS`, `HTTPS`, percentages, and exact limits, unless the same paragraph has official Volcengine evidence and a retrieval date.
 - If official sources conflict, prefer the more specific and more recently updated source. If priority is unclear, preserve the conflict as an open item.
 - Never invent exact costs, SLA, regions, quotas, model limits, or specifications from memory.
 
@@ -80,7 +83,7 @@ Every final proposal must contain:
 - A facts, assumptions, and open-items split.
 - Architecture decisions with rationale, alternative, and reason not selected.
 - Mermaid logical architecture or an explicit `Diagram degradation:` notice.
-- Deployment topology covering region or unresolved region, availability zones, VPC, subnets, ingress, and disaster recovery relationships.
+- Deployment topology covering deployment location or unresolved deployment location, availability zones, VPC, subnets, ingress, and disaster recovery relationships. Use the literal word `region` only with official evidence and retrieval date in the same paragraph.
 - Numbered end-to-end flows with sync/async behavior, protocol, data type, storage, and failure handling.
 - Product mapping rows with alternative and switch condition.
 - Security, reliability, observability, performance, and cost coverage.
@@ -91,7 +94,7 @@ Every final proposal must contain:
 
 ## Exact Final Output
 
-Use these section headings in this order:
+Start final responses with `## Requirements gap check`, then use these twelve section headings in this order:
 
 ```markdown
 ## Executive summary
@@ -114,6 +117,8 @@ Use this product mapping header exactly:
 | Architecture capability | Recommended Volcengine product | Why it fits | Alternative | Switch condition | Evidence |
 | --- | --- | --- | --- | --- | --- |
 ```
+
+Every product mapping `Evidence` cell must include an official `volcengine.com` URL and `Retrieved: YYYY-MM-DD`, even when the URL is only a discovery entry and runtime verification is still required.
 
 End with these score lines, using values `0`, `1`, or `2`:
 

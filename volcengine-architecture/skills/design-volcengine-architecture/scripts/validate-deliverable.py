@@ -58,7 +58,7 @@ def validate_markdown(text: str) -> list[str]:
             errors.append("READY is incompatible with a critical open item")
 
     dynamic = re.compile(
-        r"price|价格|SLA|quota|配额|region|地域|QPS|TPS|\d+(?:\.\d+)?%",
+        r"\bprice\b|价格|\bSLA\b|\bquota\b|配额|\bregion\b|地域|\bQPS\b|\bTPS\b|\d+(?:\.\d+)?%",
         re.IGNORECASE,
     )
     dated = re.compile(r"(?:Retrieved:\s*|查询日期：)\d{4}-\d{2}-\d{2}")
