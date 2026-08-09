@@ -1,159 +1,154 @@
 ## Requirements gap check
 Known facts
-- 目标：面向全国用户的教育直播与回放平台。
-- 必需能力：连麦、直播转码、内容审核、弱网体验保障、直播回放。
+- Goal: a national education live-class and replay platform.
+- Required capabilities: student-teacher interaction, live transcoding, content review, weak-network experience protection, and replay.
 
 Architecture-changing gaps
-- 用户规模、并发课堂规模、互动人数、课程时长、峰值时段未知。
-- 内容审核范围未知：音频、视频、封面、评论、课件、回放成片是否都需审核。
-- 合规边界、数据分级、留存周期、未成年人保护要求未知。
-- deployment location、service target、capacity target、commercial terms 均需 runtime verification required。
+- capacity target, peak profile, class duration, viewers per class, and interactive seats are unknown.
+- Moderation scope is unknown for live audio/video, replay, covers, comments, courseware, and manual review.
+- Data governance, retention, deletion, minor protection, and audit evidence requirements are unknown.
+- deployment location, commercial terms, service target, SDK/platform fit, and media protocol fit need runtime verification required.
 
 Assumptions if unanswered
-- Assumption: 采用托管媒体服务优先，业务系统只承载课堂编排、鉴权、课表、订单、运营后台。Switch condition: 如需自研媒体链路，改为云原生媒体网关加自建处理流水线。
-- Assumption: 连麦用于教师与少量学生互动，大班观看走直播分发。Switch condition: 如全员实时互动，主链路改为 veRTC 房间模式。
-- Assumption: 回放来自直播录制并进入点播处理。Switch condition: 如回放需复杂剪辑生产，增加独立媒资生产工作流。
+- Assumption: live teaching is one teacher or small-group interaction with larger one-to-many viewing. Switch condition: if most students need continuous bidirectional media, make veRTC the primary classroom path.
+- Assumption: replay is generated from live recording and published after review. Switch condition: if replay needs editing or packaging, add a dedicated media production workflow.
+- Assumption: business systems own identity, course entitlement, class state, review workflow, and operations. Switch condition: if Volcengine-native enterprise live workflows own these, reduce custom backend scope.
 
 ## Executive summary
-建议采用“veRTC 连麦 + 视频直播大班分发 + 视频点播回放 + 内容安全审核 + CDN 加速 + 私有网络与安全边界”的组合。实时互动与大规模观看拆成两条链路：互动课堂走 veRTC，旁路或主讲流进入直播链路，录制后进入点播链路供回放。
+Use a split media architecture: veRTC for low-latency interaction, Video Live for one-to-many class broadcast and live processing, Video on Demand for replay lifecycle, CDN for national playback delivery, and managed review controls before or during publication. Business services remain responsible for class orchestration, authorization, entitlements, audit trails, and operational review state.
 
-本方案是有条件设计，不是上线授权。deployment location、commercial terms、service target、capacity target、终端 SDK 支持、协议兼容、审核能力边界均需 runtime verification required。
-
-routing:
-```yaml
-scenario_labels: [MEDIA, EDGE, CLOUD_NATIVE, STORAGE]
-quality_labels: [LOW_LATENCY, HIGH_THROUGHPUT, HIGH_AVAILABILITY, DISASTER_RECOVERY]
-constraint_labels: [DATA_RESIDENCY, REGULATED, COST_SENSITIVE]
-product_families: [media-edge, networking-security, database-storage, compute-cloud-native]
-roles: [requirements-analyst, product-researcher, domain-architect, security-reliability-reviewer, finops-reviewer]
-execution_mode: serial
-rationale:
-  - MEDIA: live, replay, transcoding, RTC are core flows.
-  - EDGE: national playback and weak-network experience need edge delivery.
-  - REGULATED: education content and user data require audit and governance.
-```
+This is a bounded proposal, not a production authorization. Open capacity, governance, service target, deployment location, and commercial terms keep readiness at NOT READY.
 
 ## Known facts, assumptions, and open items
 Known facts:
-- 全国用户教育直播与回放。
-- 需要连麦、转码、内容审核、弱网体验保障。
+- The workload is an education live and replay platform for national users.
+- Required media features include interaction, live transcoding, content review, weak-network handling, and replay.
 
 Assumptions:
-- 课堂身份包括教师、助教、学生、运营审核员。
-- 直播观看以一对多为主，连麦是局部互动。
-- 回放需要鉴权、防盗链、审核后发布。
-- 弱网保障以端侧 SDK、直播分发、播放器策略、质量监控共同实现。
+- Teachers publish media; students mostly view and sometimes join interaction.
+- Playback authorization is controlled by the education backend.
+- Replay is not publicly released until review passes.
+- Weak-network protection combines SDK behavior, adaptive playback, CDN delivery, and telemetry.
 
 Open items:
-- capacity target and peak profile。
-- deployment location and data governance boundary。
-- service target and recovery objective。
-- content moderation policy and human review workflow。
-- retention, deletion, watermarking, copyright controls。
-- runtime verification required for all selected service limits and commercial terms。
+- capacity target, course schedule peak shape, viewer mix, and interactive-seat model.
+- Moderation categories, escalation policy, manual review staffing, and evidence retention.
+- Data classification, retention/deletion rules, account boundary, and deployment location.
+- service target, recovery objective, incident ownership, and operational runbooks.
+- runtime verification required for SDK platforms, media protocols, processing templates, commercial terms, and service compatibility.
+
+```yaml
+routing:
+  scenario_labels: [MEDIA, EDGE, CLOUD_NATIVE, STORAGE]
+  quality_labels: [LOW_LATENCY, HIGH_THROUGHPUT, HIGH_AVAILABILITY, DISASTER_RECOVERY]
+  constraint_labels: [PRIVATE_NETWORK, DATA_RESIDENCY, REGULATED, COST_SENSITIVE]
+  product_families: [media-edge, networking-security, database-storage, compute-cloud-native]
+  roles: [requirements-analyst, product-researcher, domain-architect, security-reliability-reviewer, finops-reviewer]
+  execution_mode: serial
+  rationale:
+    - MEDIA covers live, RTC, transcoding, moderation, and replay.
+    - EDGE covers national delivery and weak-network playback quality.
+    - REGULATED, DATA_RESIDENCY, and DISASTER_RECOVERY stay open because education content, user data, and replay retention are unresolved.
+```
 
 ## Architecture decisions
 | Decision | Rationale | Alternative | Reason not selected |
 | --- | --- | --- | --- |
-| 连麦使用 veRTC，观看使用视频直播 | 区分实时互动和大班分发，降低课堂广播链路复杂度 | 全部使用 veRTC | 对大规模旁听不一定经济或必要 |
-| 回放使用视频点播承载 | 录制、处理、媒资、播放形成独立生命周期 | 对象存储直出 | 需要自建转码、封面、播放、安全与质量能力 |
-| 热门课程通过 CDN 分发 | 全国访问需要边缘缓存与回源控制 | 仅源站播放 | 源站压力与跨地访问体验风险更高 |
-| 内容审核放在发布前与直播中双点 | 直播风险和回放风险不同 | 只做回放审核 | 直播过程违规无法及时处置 |
-| 业务服务运行在私有网络内 | 课表、鉴权、审核后台与媒资回调需要隔离 | 全公网部署 | 暴露面更大，审计和访问控制更难 |
-| 质量监控覆盖端、流、转码、播放 | 弱网体验需要可观测闭环 | 仅采集服务端日志 | 无法定位终端网络和播放器问题 |
+| Split interaction from broadcast delivery | veRTC fits real-time interaction while Video Live fits one-to-many viewing | veRTC-only classroom | May overfit large passive viewing and cost model is unverified |
+| Use VOD for replay lifecycle | Replay needs asset management, processing, distribution, and playback controls | TOS plus custom processors | Higher custom workflow and operations burden |
+| Place review controls before replay release and during live operations | Live risk and replay publishing risk happen at different times | Replay-only review | Does not control live-session violations |
+| Deliver playback through CDN | National playback benefits from edge caching and origin protection | Direct origin delivery | Higher origin pressure and weaker user proximity controls |
+| Keep business APIs private behind controlled ingress | Identity, entitlements, callbacks, and review actions need clear boundaries | Public backend services | Larger exposed surface and harder audit control |
 
 ## Logical architecture
 ```mermaid
 flowchart LR
-  T[Teacher App] --> RTC[veRTC room]
-  S[Student App] --> RTC
-  T --> LIVE[Live ingest]
-  RTC --> LIVE
-  LIVE --> PROC[Live processing and moderation]
-  PROC --> CDN[CDN delivery]
-  CDN --> P[Player SDK]
-  PROC --> REC[Recording]
-  REC --> VOD[Video on Demand workflow]
-  VOD --> MOD[Replay moderation]
-  MOD --> CDN
-  P --> Q[Quality telemetry]
-  Q --> OBS[Monitoring and alerting]
-  APP[Education backend] --> AUTH[Auth and playback token]
-  AUTH --> T
-  AUTH --> S
-  APP --> AUDIT[Audit and operation logs]
+  Teacher[Teacher app] --> RTC[veRTC room]
+  Student[Student app] --> RTC
+  Teacher --> Live[Video Live ingest]
+  RTC --> Live
+  Live --> Process[Live processing and review]
+  Process --> CDN[CDN delivery]
+  CDN --> Player[Student player]
+  Process --> Record[Live recording]
+  Record --> VOD[Video on Demand]
+  VOD --> Review[Replay review workflow]
+  Review --> CDN
+  Backend[Education backend] --> Auth[Token and entitlement service]
+  Auth --> Teacher
+  Auth --> Student
+  Backend --> Audit[Audit and operations logs]
+  Player --> Quality[Client quality telemetry]
+  Quality --> Ops[Monitoring and alerting]
 ```
 
 ## Deployment topology
-- deployment location: unresolved; runtime verification required before site selection.
-- Fault-domain plan: business backend, databases, cache, media callbacks, and audit services should be split across independent failure domains where supported.
-- Network: one private network per environment; public ingress only through DNS, CDN, WAF or load balancer paths; backend services stay private.
-- Subnets: public ingress subnet, application subnet, data subnet, observability subnet, management subnet.
-- Disaster recovery: metadata and audit data require cross-site backup strategy; media assets require lifecycle, replication, and restore drills after deployment location is confirmed.
-- Ingress: app API through WAF and load balancing; media playback through CDN; RTC and live ingest through selected managed media endpoints.
+- deployment location: unresolved; runtime verification required before production placement.
+- Failure domains: separate business API, media callback workers, review console, database, cache, and observability components where supported.
+- Network: private network per environment with public ingress only through DNS, CDN, WAF, or load balancing paths.
+- Subnets: ingress, application, data, observability, and management tiers with least-required routing.
+- Recovery: metadata and audit stores need backup and restore drills; replay assets need lifecycle, replication, deletion, and restore validation after governance is confirmed.
+- Ingress: business API via WAF and load balancing; media playback via CDN; RTC/live ingest via managed media endpoints after runtime verification required.
 
 ## End-to-end data flow
-1. Login and class entry: synchronous HTTPS; user identity, course entitlement, classroom role; backend issues short-lived access token; failure returns retryable user state and audit event.
-2. Teacher starts class: synchronous SDK signaling plus live ingest; audio/video stream enters veRTC and live workflow; failure triggers reconnection and fallback to audio-only policy.
-3. Student watches live: HTTPS obtains play authorization, player connects to CDN/live path; media data is streamed; weak network triggers adaptive playback and telemetry upload.
-4. Student joins interaction: synchronous room join request, real-time media over SDK path; if join fails, user remains viewer and receives state message.
-5. Transcoding: asynchronous live processing; stream variants are produced for device and network adaptation; failures alert operations and can fall back to available stream path.
-6. Moderation: live moderation is near-real-time operational control; replay moderation is asynchronous before publishing; uncertain content enters human review queue.
-7. Recording to replay: asynchronous recording output enters VOD workflow; metadata stored in business database; media stored in managed media storage or object storage.
-8. Replay playback: synchronous entitlement check, signed playback URL issued, media delivered via CDN; expired token or revoked course blocks playback.
-9. Observability: clients, backend, live, RTC, processing, CDN and VOD emit logs or metrics; alerts route to operations owner.
+1. Class entry is synchronous over secure HTTP: user identity, course entitlement, and role are checked; failure records an audit event and returns a safe denial.
+2. Teacher starts class through SDK signaling and live ingest: audio/video stream enters veRTC and/or Video Live; failure triggers reconnect and audio-only fallback where supported.
+3. Student watches live through signed playback authorization: media streams from CDN/live delivery; weak-network events trigger adaptive playback and telemetry upload.
+4. Student joins interaction through a controlled room token: real-time media flows through veRTC; failure leaves the student in viewer mode.
+5. Live transcoding is asynchronous: stream variants are produced for device/network adaptation; processing failure alerts operations and falls back to available stream output.
+6. Content review runs on live operations and replay publish gates: uncertain results enter a manual review queue; rejected content is blocked or taken down.
+7. Recording and replay creation are asynchronous: live recording enters VOD workflow; replay metadata is stored by the business backend.
+8. Replay playback is synchronous for entitlement and asynchronous for media delivery: expired or revoked tokens block access; playback errors emit quality telemetry.
 
 ## Volcengine product mapping
 | Architecture capability | Recommended Volcengine product | Why it fits | Alternative | Switch condition | Evidence |
 | --- | --- | --- | --- | --- | --- |
-| 连麦互动 | 实时音视频 veRTC | Supports real-time audio/video communication, client SDK integration, room/session control, and quality monitoring. | 视频直播互动方案 | If interaction is only teacher broadcast with no real-time student media. | https://www.volcengine.com/docs/6348 Retrieved: 2026-08-09 |
-| 直播分发 | 视频直播 | Supports live ingest, live processing, distribution, playback, recording and monitoring. | veRTC-only classroom | If every participant requires real-time bidirectional media. | https://www.volcengine.com/docs/6469 Retrieved: 2026-08-09 |
-| 回放媒资 | 视频点播 | Supports upload, asset management, media processing, on-demand distribution, playback and quality monitoring. | TOS plus self-built workflow | If managed VOD processing is unsuitable after runtime verification required. | https://www.volcengine.com/docs/4 Retrieved: 2026-08-09 |
-| 全国播放加速 | 内容分发网络 CDN | Supports edge content caching, origin fetch, domain and cache control for cacheable media. | Direct origin delivery | If content is not cacheable or cache policy cannot meet governance needs. | https://www.volcengine.com/docs/6454 Retrieved: 2026-08-09 |
-| Traffic steering | TrafficRoute DNS 套件 | Supports DNS management, traffic steering and health-aware routing. | Single DNS endpoint | If single managed media endpoint is sufficient. | https://www.volcengine.com/docs/6758 Retrieved: 2026-08-09 |
-| Network isolation | 私有网络 | Supports isolated virtual networking, subnets, routes and security controls. | Flat public network | If no private workloads exist, which is unlikely for this platform. | https://www.volcengine.com/docs/6401 Retrieved: 2026-08-09 |
-| Web/API ingress | 负载均衡 + Web应用防火墙 | Load balancing supports backend distribution and health checks; WAF supports web/API inspection and security logging. | CDN-only web ingress | If APIs are not public or are served by another gateway. | https://www.volcengine.com/docs/6406 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6511 Retrieved: 2026-08-09 |
-| Identity and keys | 访问控制 IAM + 密钥管理系统 | IAM supports policy authorization; KMS supports managed key custody and cryptographic operations. | Application-only credentials | If service integration or key ownership model fails runtime verification required. | https://www.volcengine.com/docs/6257/64959?lang=zh Retrieved: 2026-08-09; https://www.volcengine.com/product/kms Retrieved: 2026-08-09 |
+| Real-time interaction | 实时音视频 veRTC | Fits interactive audio/video rooms, SDK integration, room/session control, and quality monitoring. | Video Live only | If interaction is removed or reduced to one-way broadcast. | https://www.volcengine.com/docs/6348 Retrieved: 2026-08-09 |
+| Live broadcast and transcoding path | 视频直播 | Fits live ingest, live processing, distribution, playback, recording, and monitoring. | veRTC-only classroom | If every attendee needs bidirectional real-time media. | https://www.volcengine.com/docs/6469 Retrieved: 2026-08-09 |
+| Replay lifecycle | 视频点播 | Fits recorded-media asset management, processing, distribution, playback, and quality monitoring. | 对象存储 TOS plus custom workflow | If managed VOD processing or playback controls do not fit after runtime verification required. | https://www.volcengine.com/docs/4 Retrieved: 2026-08-09 |
+| National playback delivery | 内容分发网络 CDN | Fits cacheable media delivery, origin fetch, domain management, and cache control. | Direct origin playback | If content is not cacheable or cache-key governance fails. | https://www.volcengine.com/docs/6454 Retrieved: 2026-08-09 |
+| Live/replay inspection workflow | 企业直播直播质检 | Fits live stream inspection, machine/manual review workflow, realtime analysis, and alerting discovery. | Custom moderation service | If moderation categories, callbacks, or workflow fit are not verified. | https://www.volcengine.com/docs/3019/2024033 Retrieved: 2026-08-09 |
+| Cover/image review | veImageX 智能审核 | Fits managed image review and review-task workflow for image-centric assets. | Business-owned image review | If only video/audio require review. | https://www.volcengine.com/docs/508/1160396 Retrieved: 2026-08-09 |
+| Private service boundary | 私有网络 | Fits isolated virtual networking, subnets, routes, security groups, and access control. | Public-only backend | If no private workloads remain, unlikely for this platform. | https://www.volcengine.com/docs/6401 Retrieved: 2026-08-09 |
+| Public API protection | 负载均衡 + Web应用防火墙 | Fits backend traffic distribution, health checking, web/API inspection, and security logging. | CDN-only API entry | If APIs are private-only or another gateway is mandated. | https://www.volcengine.com/docs/6406 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6511 Retrieved: 2026-08-09 |
+| Identity and key governance | 访问控制 IAM + 密钥管理系统 | Fits policy authorization, temporary credentials, managed key custody, and cryptographic operations. | Application-only credentials | If key ownership or service integration fails runtime verification required. | https://www.volcengine.com/docs/6257/64959?lang=zh Retrieved: 2026-08-09; https://www.volcengine.com/product/kms Retrieved: 2026-08-09 |
+| Replay object storage option | 对象存储 TOS | Fits object semantics, bucket/object management, lifecycle, and access control for durable artifacts. | VOD-managed media store only | If VOD fully owns replay storage and lifecycle. | https://www.volcengine.com/docs/6349 Retrieved: 2026-08-09 |
 
 ## Non-functional design
-- Capacity and elasticity: define classroom concurrency, viewers per class, interactive seats, stream profiles, recording workload, and callback backlog as capacity target; runtime verification required.
-- Availability and recovery: split critical services across independent failure domains; define service target and recovery objective before production.
-- Security and compliance: enforce IAM least privilege, short-lived playback tokens, WAF on public APIs, signed media access, audit logs, encryption with managed keys where supported, and moderation evidence retention.
-- Observability: track publish success, join success, startup time, rebuffering, interaction delay, transcoding failure, recording completion, moderation queue age, playback errors, and CDN/origin health.
-- Performance: use adaptive encoding, player retry, pre-class device check, audio fallback, CDN distribution, and client telemetry to improve weak-network behavior.
-- Cost: primary drivers are live duration, RTC interaction duration, transcoding, recording storage, replay traffic, moderation workload, and log retention; commercial terms require runtime verification required.
-
-Serial role pass review:
-- Security/reliability: design is plausible but blocked by unresolved data governance, service target, recovery objective, and moderation rules.
-- FinOps: no estimate should be produced until traffic mix, retention, replay ratio, and commercial terms are verified.
+- Capacity and elasticity: define class concurrency, viewers per class, interactive seats, bitrate ladder, recording volume, callback backlog, and review queue as capacity target.
+- Availability and recovery: remove single points in business APIs, token issuance, callbacks, review queue, metadata storage, and observability; service target and recovery objective remain open.
+- Security and compliance: use least-privilege IAM, short-lived media tokens, signed playback, WAF on public APIs, private backend paths, KMS-backed encryption where supported, and immutable audit logs.
+- Observability: track class start success, room join success, publish failures, startup time, rebuffering, interaction delay, transcoding errors, recording completion, review queue age, and playback errors.
+- Performance: use pre-class device checks, adaptive playback, reconnection, audio fallback, CDN delivery, and client telemetry to tune weak-network behavior.
+- Cost: major drivers are RTC duration, live duration, transcoding, recording, replay storage, CDN traffic, moderation volume, logs, and retention; no estimate is valid before commercial terms and usage data are verified.
 
 ## Implementation roadmap
 PoC:
-- Build one teacher app, one student app, veRTC room, live ingest, replay generation, basic moderation callback, and telemetry dashboard.
-- Acceptance: full class lifecycle works on representative devices; failure events are observable.
+- Build teacher publish, student watch, one veRTC interaction path, one live-to-replay path, basic review callback, and a quality dashboard.
+- Acceptance: one representative class completes from start through replay publication with observable failures.
 
 Minimum production:
-- Add IAM roles, WAF, signed playback, audit logs, review console, retry/idempotency for callbacks, backup and restore runbooks, and incident procedures.
-- Acceptance: access control, moderation workflow, replay publishing, and recovery drills pass.
+- Add IAM roles, WAF, signed playback, audit trails, manual review console, callback idempotency, backup/restore runbooks, and incident procedures.
+- Acceptance: access control, review gate, replay publishing, failure recovery, and audit evidence pass controlled tests.
 
 Scale phase:
-- Add multi-site traffic steering, hot-course delivery tuning, automated quality analysis, capacity test harness, operations dashboards, and cost allocation tags.
-- Acceptance: capacity target and service target are met in controlled load tests after runtime verification required.
+- Add traffic steering, hot-course cache tuning, capacity testing, automated quality analysis, cost allocation tags, and recovery exercises.
+- Acceptance: capacity target and service target are met after runtime verification required.
 
 ## Risk and validation plan
 | Risk | Probability | Impact | Mitigation | Owner | Validation method |
 | --- | --- | --- | --- | --- | --- |
-| Weak network causes class interruption | Medium | High | adaptive playback, reconnection, audio fallback, telemetry | Client lead | field test and synthetic network test |
-| Moderation misses live violations | Medium | High | live detection, human escalation, replay gate | Trust and safety | red-team content test |
-| Replay publish callback loss | Medium | Medium | idempotent callbacks, retry queue, reconciliation job | Backend lead | fault injection |
-| Unclear data governance | Medium | High | classify data, define retention, confirm deployment location | Security lead | compliance review |
-| Cost overrun from replay traffic | Medium | Medium | cache policy, lifecycle rules, per-course cost attribution | FinOps | billing dry run after commercial terms check |
-| Managed service capability mismatch | Medium | High | runtime verification required for SDK, protocol, processing and account support | Architect | vendor console and doc validation |
+| Weak network disrupts live class | Medium | High | adaptive playback, reconnect, audio fallback, telemetry | Client lead | device and network impairment tests |
+| Live violations are missed | Medium | High | live inspection, manual escalation, replay gate | Trust and safety | red-team moderation tests |
+| Replay callback loss corrupts publish state | Medium | Medium | idempotent callbacks, retry queue, reconciliation | Backend lead | fault injection |
+| Data governance is under-specified | Medium | High | classify data, define retention/deletion, confirm deployment location | Security lead | compliance review |
+| Cost overrun from popular replays | Medium | Medium | cache policy, lifecycle rules, course-level cost allocation | FinOps | billing dry run after commercial verification |
+| Managed service fit mismatch | Medium | High | verify SDKs, protocols, templates, callbacks, and account support | Architect | console and documentation validation |
 
 ## Official evidence and freshness
-Evidence used is official Volcengine discovery documentation, cited in the product mapping table with `Retrieved: 2026-08-09`.
+Evidence level: A-level official Volcengine discovery sources are cited in the product mapping table with `Retrieved: 2026-08-09`.
 
-Dynamic or account-specific facts not asserted: deployment location, commercial terms, service target, capacity target, protocol edge cases, SDK platform support, processing templates, retention behavior, moderation coverage, and service-to-service compatibility. All require runtime verification required before production planning.
+Dynamic or account-specific facts not asserted: deployment location, commercial terms, service target, capacity target, endpoint fit, SDK platform support, media protocols, codec/container support, processing templates, review categories, callback behavior, retention behavior, and service-to-service compatibility. These require runtime verification required before production planning.
 
 ## Completeness score
 Requirements: 1
@@ -164,7 +159,7 @@ Cost: 1
 Evidence: 1
 Production readiness: NOT READY
 
-Blocker: architecture-changing capacity target, deployment location, service target, moderation policy, data governance, and commercial terms remain unresolved.
+Blocker: capacity target, deployment location, service target, data governance, moderation policy, recovery objective, and commercial terms remain unresolved.
 
 ## Forward observations
 - Requirements gap list before solution: PASS

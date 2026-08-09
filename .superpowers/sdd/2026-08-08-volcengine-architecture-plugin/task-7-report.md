@@ -7,9 +7,7 @@ Completed forward testing for all six frozen scenarios with fresh child-agent re
 - responses did not make the requirements gap block the first observable content;
 - dynamic-fact handling was not validator-compatible, and the validator also falsely matched `TPS` inside `https://`.
 
-Applied the smallest repairs to the Skill and validator, reran affected scenarios, and persisted the best fresh post-repair raw outputs.
-
-Fix round 1 status on 2026-08-09: local validator and Skill contracts were tightened after review, but fresh scenario regeneration was stopped before any new affected output completed. The existing forward files are therefore not all valid under the stricter validator. This report preserves that provenance and does not mark the affected scenarios as PASS.
+Applied the smallest repairs to the Skill and validator, reran affected scenarios, and persisted the best fresh post-repair raw outputs. A later completion pass replaced the four remaining invalid forward files with fresh child-agent payloads copied verbatim from session logs, then appended only parent-owned observations. All six forward files now validate under the stricter validator.
 
 ## Artifacts
 
@@ -31,17 +29,18 @@ The final persisted runs are recorded in `tests/forward/collection-provenance.md
 Final child outputs used:
 
 - `ai-agent`: `/root/task7_forward/rerun_ai_agent_final`
-- `cloud-native`: `/root/task7_forward/rerun_cloud_native`
-- `realtime-data`: `/root/task7_forward/rerun_realtime_data`
-- `media`: `/root/task7_forward/rerun_media`
+- `cloud-native`: `/root/complete_forward_validation/cloud_native_fix`
+- `realtime-data`: `/root/complete_forward_validation/realtime_data_fix`
+- `media`: `/root/complete_forward_validation/media_fix`
 - `intelligent-service`: `/root/task7_forward/rerun_intelligent_service`
-- `regulated-finance`: `/root/task7_forward/rerun_regulated_finance`
+- `regulated-finance`: `/root/complete_forward_validation/regulated_finance_fix`
 
 Discarded or unused child runs:
 
 - Initial pre-repair runs were preserved only as measurement context, then replaced by fresh post-repair outputs.
 - `/root/forward_intelligent_service_final` was persisted as the sixth pre-repair artifact before the repair cycle, then superseded by `/root/task7_forward/rerun_intelligent_service`.
 - `/root/task7_forward/rerun_cloud_native_final` hung after the final validator wording repair and was interrupted; its output was not used.
+- `/root/finish_task7_fix/rerun_cloud_native_fix`, `/root/finish_task7_fix/rerun_realtime_data_fix`, and `/root/finish_task7_fix/rerun_regulated_finance_fix` were interrupted in the prior blocked pass and not persisted.
 
 ## Repairs
 
@@ -66,16 +65,16 @@ Reference repair:
 - Added ASR/TTS product candidates in `ai-and-agent.md`.
 - Added content moderation product candidates in `media-edge.md`.
 
-Fresh rerun status:
+Completion pass:
 
-- `/root/finish_task7_fix/rerun_cloud_native_fix`: interrupted after user instruction to stop long-running generation; no output persisted.
-- `/root/finish_task7_fix/rerun_realtime_data_fix`: interrupted after user instruction to stop long-running generation; no output persisted.
-- `/root/finish_task7_fix/rerun_regulated_finance_fix`: interrupted after user instruction to stop long-running generation; no output persisted.
-- `media` and `intelligent-service`: no new rerun started before the stop instruction.
+- One fresh bounded child was used for each affected scenario: cloud-native, realtime-data, media, and regulated-finance.
+- No web browsing was used.
+- Raw proposal text was copied from child final payloads; this parent appended observations and updated provenance only.
+- The fresh child payloads exceeded the requested short-output target, but were not shortened by the parent because raw proposal hand-editing was out of scope.
 
 ## Forward observations
 
-Historical Task 7 observation blocks remain in the persisted forward files. Under the stricter fix-round validator, those observation PASS lines are no longer sufficient completion evidence for the affected files:
+All persisted forward files include parent-owned observation blocks:
 
 - Requirements gap list before solution
 - Only architecture-changing questions
@@ -85,7 +84,7 @@ Historical Task 7 observation blocks remain in the persisted forward files. Unde
 - Official evidence and retrieval dates
 - Production-readiness claim appropriately bounded
 
-The six scenarios all identify critical open gaps and mark readiness as `NOT READY`. High-risk cases include independent security/reliability review content. Material scale/cost cases include FinOps findings. However, cloud-native, media, realtime-data, and regulated-finance require fresh regenerated outputs or provenance-preserving replacements before they can be counted as validated under fix round 1.
+The six scenarios all identify critical open gaps and mark readiness as `NOT READY`. High-risk cases include independent security/reliability review content. Material scale/cost cases include FinOps findings. The four previously failing scenarios now have fresh provenance-preserving replacements recorded in `tests/forward/collection-provenance.md`.
 
 ## Verification
 
@@ -93,7 +92,7 @@ The six scenarios all identify critical open gaps and mark readiness as `NOT REA
 python3 -m unittest tests/test_validate_deliverable.py
 ............
 ----------------------------------------------------------------------
-Ran 12 tests in 0.003s
+Ran 12 tests in 0.004s
 
 OK
 ```
@@ -102,19 +101,18 @@ OK
 tests/forward/ai-agent.md
 VALID
 tests/forward/cloud-native.md
-missing routing record before architecture decisions
-product mapping evidence lacks official URL and retrieval date
+VALID
 tests/forward/intelligent-service.md
 VALID
 tests/forward/media.md
-missing routing record before architecture decisions
+VALID
 tests/forward/realtime-data.md
-missing routing record before architecture decisions
+VALID
 tests/forward/regulated-finance.md
-product mapping evidence lacks official URL and retrieval date
+VALID
 ```
 
-Current stop condition: blocked by the explicit instruction to stop fresh scenario generation. The local validator/Skill/reference fixes are verified by unit tests; the forward scenario artifacts require fresh reruns or provenance-preserving replacement before the stricter six-file validator suite can pass.
+Current stop condition: all unit tests and forward-file validators pass.
 
 ```text
 tests/forward/ai-agent.md first=## Requirements gap check
