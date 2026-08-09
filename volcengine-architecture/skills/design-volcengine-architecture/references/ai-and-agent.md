@@ -50,6 +50,18 @@ products:
     use_when: [semantic retrieval is required for grounding, recommendation or similarity workflows]
     avoid_or_verify_when: [embedding compatibility, metadata filtering or freshness behavior is unverified]
     dynamic_fields_to_recheck: [region, price, specification, quota, SLA, version]
+  - product_name: 火山方舟语音模型
+    official_url: https://www.volcengine.com/docs/82379/2516286
+    stable_capabilities: [speech synthesis, speech recognition, HTTP and WebSocket model access]
+    use_when: [intelligent applications need managed ASR or TTS through a model access layer]
+    avoid_or_verify_when: [audio format, streaming behavior, model availability, and data-handling terms are unverified]
+    dynamic_fields_to_recheck: [region, price, specification, quota, SLA, version]
+  - product_name: 豆包语音
+    official_url: https://www.volcengine.com/docs/6561/1354869
+    stable_capabilities: [streaming speech recognition, speech synthesis model documentation, WebSocket ASR access]
+    use_when: [voice-first services need ASR or TTS model capabilities with direct voice APIs]
+    avoid_or_verify_when: [language support, voice selection, latency target, commercial terms, and account enablement are unverified]
+    dynamic_fields_to_recheck: [region, price, specification, quota, SLA, version]
 ```
 
 ## Integration patterns
@@ -77,4 +89,5 @@ For every shortlisted product, recheck `region`, `price`, `specification`, `quot
 - [Volcano Engine AI cloud overview](https://www.volcengine.com/sem)
 - [Doubao model product page](https://www.volcengine.com/product/doubao-dy)
 - [Ark documentation](https://www.volcengine.com/docs/82379/66619f8df281250274ef4f88?lang=zh)
-
+- [Ark voice model access documentation](https://www.volcengine.com/docs/82379/2516286)
+- [Doubao streaming ASR documentation](https://www.volcengine.com/docs/6561/1354869)

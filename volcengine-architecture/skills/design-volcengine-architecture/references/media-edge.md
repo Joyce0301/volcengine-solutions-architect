@@ -62,6 +62,18 @@ products:
     use_when: [multi-endpoint or multi-site delivery needs DNS-based traffic routing and failover]
     avoid_or_verify_when: [DNS caching behavior is incompatible with the recovery objective, resolver and routing policy support are unverified]
     dynamic_fields_to_recheck: [region, price, specification, quota, SLA, version]
+  - product_name: veImageX 智能审核
+    official_url: https://www.volcengine.com/docs/508/1160396
+    stable_capabilities: [managed image content review, media safety workflow integration, review task operation]
+    use_when: [image-centric media flows need managed content moderation before publication or distribution]
+    avoid_or_verify_when: [video or live-review coverage, moderation categories, callback behavior, and manual review process are unverified]
+    dynamic_fields_to_recheck: [region, price, specification, quota, SLA, version]
+  - product_name: 企业直播直播质检
+    official_url: https://www.volcengine.com/docs/3019/2024033
+    stable_capabilities: [live stream inspection, machine and manual review workflow, realtime analysis and alerting]
+    use_when: [live or recorded video compliance review needs a managed inspection workflow]
+    avoid_or_verify_when: [the workload is not enterprise live content, integration path and moderation scope are unverified]
+    dynamic_fields_to_recheck: [region, price, specification, quota, SLA, version]
 ```
 
 ## Integration patterns
@@ -93,3 +105,5 @@ For every shortlisted product, recheck `region`, `price`, `specification`, `quot
 - [veImageX documentation](https://www.volcengine.com/docs/508)
 - [Edge Computing Node documentation](https://www.volcengine.com/docs/6499)
 - [TrafficRoute documentation](https://www.volcengine.com/docs/6758)
+- [veImageX intelligent review documentation](https://www.volcengine.com/docs/508/1160396)
+- [Enterprise Live inspection quick start](https://www.volcengine.com/docs/3019/2024033)

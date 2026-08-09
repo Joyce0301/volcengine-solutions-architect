@@ -17,7 +17,7 @@ Design Volcengine architectures from business requirements. Start with gaps, sep
    - `Assumptions if unanswered`
    If the first response is an interview, still start with this block and then ask only gated questions. If proceeding to a full proposal, keep this block as a required preface, then render the exact twelve-section proposal below.
 3. Ask only questions that pass the question-impact gate from `intake-contract.md`. Ask at most two rounds. If the user cannot answer or the second round is complete, proceed with explicit assumptions and switch conditions.
-4. Read [references/routing-matrix.md](references/routing-matrix.md). Assign scenario, quality, and constraint labels with a one-line rationale for each label.
+4. Read [references/routing-matrix.md](references/routing-matrix.md). Assign scenario, quality, and constraint labels with a one-line rationale for each label. In any full proposal, write the fenced `routing:` record before `## Architecture decisions`; do not make product or topology decisions before this record is visible.
 5. Load [references/product-catalog.md](references/product-catalog.md), then load only the domain references selected by routing:
    - `AI_AGENT` -> [references/ai-and-agent.md](references/ai-and-agent.md)
    - `CLOUD_NATIVE` -> [references/compute-cloud-native.md](references/compute-cloud-native.md)
@@ -61,7 +61,7 @@ Switch condition: If <different answer>, change <product/topology/flow/security/
 
 ## Routing And Role Labels
 
-Record routing in the final design notes:
+Record routing in the final design notes before architecture decisions:
 
 ```yaml
 routing:
@@ -81,6 +81,7 @@ Use roles as optional execution structure, not as a dependency. If multi-agent e
 Every final proposal must contain:
 
 - A facts, assumptions, and open-items split.
+- A fenced `routing:` record before `## Architecture decisions`.
 - Architecture decisions with rationale, alternative, and reason not selected.
 - Mermaid logical architecture or an explicit `Diagram degradation:` notice.
 - Deployment topology covering deployment location or unresolved deployment location, availability zones, VPC, subnets, ingress, and disaster recovery relationships. Use the literal word `region` only with official evidence and retrieval date in the same paragraph.
@@ -94,11 +95,21 @@ Every final proposal must contain:
 
 ## Exact Final Output
 
-Start final responses with `## Requirements gap check`, then use these twelve section headings in this order:
+Start final responses with `## Requirements gap check`, then use these twelve section headings in this order. After `## Known facts, assumptions, and open items` and before `## Architecture decisions`, insert the required fenced `routing:` record.
 
-```markdown
+````markdown
 ## Executive summary
 ## Known facts, assumptions, and open items
+```yaml
+routing:
+  scenario_labels: [string]
+  quality_labels: [string]
+  constraint_labels: [string]
+  product_families: [string]
+  roles: [string]
+  execution_mode: serial
+  rationale: [string]
+```
 ## Architecture decisions
 ## Logical architecture
 ## Deployment topology
@@ -109,7 +120,7 @@ Start final responses with `## Requirements gap check`, then use these twelve se
 ## Risk and validation plan
 ## Official evidence and freshness
 ## Completeness score
-```
+````
 
 Use this product mapping header exactly:
 

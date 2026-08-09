@@ -26,6 +26,17 @@ Summary.
 ## Known facts, assumptions, and open items
 No critical open items.
 
+```yaml
+routing:
+  scenario_labels: [CLOUD_NATIVE]
+  quality_labels: [HIGH_AVAILABILITY]
+  constraint_labels: [PRIVATE_NETWORK]
+  product_families: [compute-cloud-native]
+  roles: [requirements-analyst]
+  execution_mode: serial
+  rationale: [test fixture]
+```
+
 ## Architecture decisions
 Decisions.
 
@@ -44,7 +55,7 @@ Flow.
 ## Volcengine product mapping
 | Architecture capability | Recommended Volcengine product | Why it fits | Alternative | Switch condition | Evidence |
 |---|---|---|---|---|---|
-| Compute | ECS | General compute | VKE | Container orchestration needed | Official documentation |
+| Compute | ECS | General compute | VKE | Container orchestration needed | https://www.volcengine.com/docs/6396 Retrieved: 2026-08-08 |
 
 ## Non-functional design
 Design.
@@ -102,6 +113,30 @@ class ValidateDeliverableTests(unittest.TestCase):
     def test_https_url_does_not_trigger_tps_detection(self):
         text = VALID_MARKDOWN + "\nOfficial discovery: https://www.volcengine.com/docs/6401.\n"
         assert validate_markdown(text) == []
+
+    def test_plural_dynamic_terms_require_evidence(self):
+        text = VALID_MARKDOWN + "\nProduction regions, prices, SLAs, and quotas are ready.\n"
+        assert "dynamic fact lacks nearby official evidence and retrieval date" in validate_markdown(text)
+
+    def test_product_mapping_evidence_requires_retrieval_date(self):
+        text = VALID_MARKDOWN.replace(
+            "| Compute | ECS | General compute | VKE | Container orchestration needed | https://www.volcengine.com/docs/6396 Retrieved: 2026-08-08 |",
+            "| Compute | ECS | General compute | VKE | Container orchestration needed | https://www.volcengine.com/docs/6396 |",
+        )
+        assert "product mapping evidence lacks official URL and retrieval date" in validate_markdown(text)
+
+    def test_requires_routing_record(self):
+        text = VALID_MARKDOWN.replace(
+            "```yaml\nrouting:\n  scenario_labels: [CLOUD_NATIVE]\n  quality_labels: [HIGH_AVAILABILITY]\n  constraint_labels: [PRIVATE_NETWORK]\n  product_families: [compute-cloud-native]\n  roles: [requirements-analyst]\n  execution_mode: serial\n  rationale: [test fixture]\n```\n\n",
+            "",
+        )
+        assert "missing routing record before architecture decisions" in validate_markdown(text)
+
+    def test_routing_record_must_precede_architecture_decisions(self):
+        routing = "```yaml\nrouting:\n  scenario_labels: [CLOUD_NATIVE]\n  quality_labels: [HIGH_AVAILABILITY]\n  constraint_labels: [PRIVATE_NETWORK]\n  product_families: [compute-cloud-native]\n  roles: [requirements-analyst]\n  execution_mode: serial\n  rationale: [test fixture]\n```\n\n"
+        text = VALID_MARKDOWN.replace(routing, "")
+        text = text.replace("## Architecture decisions\nDecisions.", "## Architecture decisions\nDecisions.\n\n" + routing)
+        assert "missing routing record before architecture decisions" in validate_markdown(text)
 
 
 if __name__ == "__main__":

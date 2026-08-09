@@ -7,7 +7,9 @@ Completed forward testing for all six frozen scenarios with fresh child-agent re
 - responses did not make the requirements gap block the first observable content;
 - dynamic-fact handling was not validator-compatible, and the validator also falsely matched `TPS` inside `https://`.
 
-Applied the smallest repairs to the Skill and validator, reran affected scenarios, and persisted the best fresh post-repair raw outputs. All six forward files now validate.
+Applied the smallest repairs to the Skill and validator, reran affected scenarios, and persisted the best fresh post-repair raw outputs.
+
+Fix round 1 status on 2026-08-09: local validator and Skill contracts were tightened after review, but fresh scenario regeneration was stopped before any new affected output completed. The existing forward files are therefore not all valid under the stricter validator. This report preserves that provenance and does not mark the affected scenarios as PASS.
 
 ## Artifacts
 
@@ -54,10 +56,26 @@ Validator repair:
 
 - Changed dynamic detection from substring matching to word-boundary matching for English trigger terms.
 - Added regression coverage so ordinary `https://www.volcengine.com/...` URLs do not trigger `TPS` detection.
+- Added product mapping validation requiring every evidence cell to include an official Volcengine URL and retrieval date.
+- Added routing validation requiring a fenced `routing:` record before `## Architecture decisions`.
+- Added regression coverage for plural dynamic terms: `prices`, `regions`, `SLAs`, and `quotas`.
+
+Reference repair:
+
+- Added official discovery entries for realtime event intake/buffering/query-serving products in `data-analytics.md`.
+- Added ASR/TTS product candidates in `ai-and-agent.md`.
+- Added content moderation product candidates in `media-edge.md`.
+
+Fresh rerun status:
+
+- `/root/finish_task7_fix/rerun_cloud_native_fix`: interrupted after user instruction to stop long-running generation; no output persisted.
+- `/root/finish_task7_fix/rerun_realtime_data_fix`: interrupted after user instruction to stop long-running generation; no output persisted.
+- `/root/finish_task7_fix/rerun_regulated_finance_fix`: interrupted after user instruction to stop long-running generation; no output persisted.
+- `media` and `intelligent-service`: no new rerun started before the stop instruction.
 
 ## Forward observations
 
-All six final files have exactly one `## Forward observations` block and all seven checks are `PASS`:
+Historical Task 7 observation blocks remain in the persisted forward files. Under the stricter fix-round validator, those observation PASS lines are no longer sufficient completion evidence for the affected files:
 
 - Requirements gap list before solution
 - Only architecture-changing questions
@@ -67,15 +85,15 @@ All six final files have exactly one `## Forward observations` block and all sev
 - Official evidence and retrieval dates
 - Production-readiness claim appropriately bounded
 
-The six scenarios all identify critical open gaps and mark readiness as `NOT READY`. High-risk cases include independent security/reliability review content. Material scale/cost cases include FinOps findings.
+The six scenarios all identify critical open gaps and mark readiness as `NOT READY`. High-risk cases include independent security/reliability review content. Material scale/cost cases include FinOps findings. However, cloud-native, media, realtime-data, and regulated-finance require fresh regenerated outputs or provenance-preserving replacements before they can be counted as validated under fix round 1.
 
 ## Verification
 
 ```text
 python3 -m unittest tests/test_validate_deliverable.py
-........
+............
 ----------------------------------------------------------------------
-Ran 8 tests in 0.002s
+Ran 12 tests in 0.003s
 
 OK
 ```
@@ -84,16 +102,19 @@ OK
 tests/forward/ai-agent.md
 VALID
 tests/forward/cloud-native.md
-VALID
+missing routing record before architecture decisions
+product mapping evidence lacks official URL and retrieval date
 tests/forward/intelligent-service.md
 VALID
 tests/forward/media.md
-VALID
+missing routing record before architecture decisions
 tests/forward/realtime-data.md
-VALID
+missing routing record before architecture decisions
 tests/forward/regulated-finance.md
-VALID
+product mapping evidence lacks official URL and retrieval date
 ```
+
+Current stop condition: blocked by the explicit instruction to stop fresh scenario generation. The local validator/Skill/reference fixes are verified by unit tests; the forward scenario artifacts require fresh reruns or provenance-preserving replacement before the stricter six-file validator suite can pass.
 
 ```text
 tests/forward/ai-agent.md first=## Requirements gap check

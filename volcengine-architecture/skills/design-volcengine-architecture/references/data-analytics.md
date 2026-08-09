@@ -38,6 +38,30 @@ products:
     use_when: [analytical workloads need a lakehouse-oriented managed service over shared data]
     avoid_or_verify_when: [table format, engine behavior or workload concurrency is unverified, operational transactions dominate]
     dynamic_fields_to_recheck: [region, price, specification, quota, SLA, version]
+  - product_name: 消息队列 Kafka版
+    official_url: https://www.volcengine.com/docs/6439
+    stable_capabilities: [Kafka-compatible message buffering, topic-based event ingestion, producer and consumer integration]
+    use_when: [realtime events need durable decoupling, replayable consumption, or Kafka protocol compatibility]
+    avoid_or_verify_when: [ordering, retention, partition count, network access, and client compatibility are unverified]
+    dynamic_fields_to_recheck: [region, price, specification, quota, SLA, version]
+  - product_name: 流式计算 Flink版
+    official_url: https://www.volcengine.com/docs/6581
+    stable_capabilities: [managed Flink stream processing, Flink SQL jobs, connector-based realtime computation]
+    use_when: [event streams require stateful processing, enrichment, aggregation, CDC processing, or realtime ETL]
+    avoid_or_verify_when: [connector support, state size, checkpoint behavior, and downstream compatibility are unverified]
+    dynamic_fields_to_recheck: [region, price, specification, quota, SLA, version]
+  - product_name: 日志服务 TLS
+    official_url: https://docs.volcengine.com/docs/6470
+    stable_capabilities: [log and event collection, storage, search analysis, alerting, dashboard visualization]
+    use_when: [operational events or logs need managed ingestion, realtime search, analysis, alerting, or visualization]
+    avoid_or_verify_when: [the data is not log/event shaped, custom schema governance or analytical warehouse semantics dominate]
+    dynamic_fields_to_recheck: [region, price, specification, quota, SLA, version]
+  - product_name: ByteHouse 企业版
+    official_url: https://www.volcengine.com/docs/6464/152221
+    stable_capabilities: [large-scale data storage, high-efficiency write, fast query analytics, warehouse serving]
+    use_when: [dashboard or analytical serving needs a managed warehouse over high-volume event-derived tables]
+    avoid_or_verify_when: [interactive BI concurrency, ingestion method, resource model, and workload isolation are unverified]
+    dynamic_fields_to_recheck: [region, price, specification, quota, SLA, version]
 ```
 
 ## Integration patterns
@@ -65,3 +89,7 @@ For every shortlisted product, recheck `region`, `price`, `specification`, `quot
 - [DataLeap documentation](https://www.volcengine.com/docs/6260)
 - [Volcano Engine documentation center](https://www.volcengine.com/docs/86403/1829870?lang=zh)
 - [Object Storage documentation](https://www.volcengine.com/docs/6349)
+- [Message Queue for Kafka documentation](https://www.volcengine.com/docs/6439)
+- [Streaming Computing Flink documentation](https://www.volcengine.com/docs/6581)
+- [TLS documentation](https://docs.volcengine.com/docs/6470)
+- [ByteHouse Enterprise documentation](https://www.volcengine.com/docs/6464/152221)
