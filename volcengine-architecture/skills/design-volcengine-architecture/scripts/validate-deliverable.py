@@ -51,7 +51,10 @@ def validate_markdown(text: str) -> list[str]:
     if re.search(r"^Production readiness:\s*READY\s*$", text, re.MULTILINE):
         if len(scores) != len(SCORE_NAMES) or any(value != 2 for value in scores.values()):
             errors.append("READY requires all completeness scores to equal 2")
-        if re.search(r"critical open item", text, re.IGNORECASE):
+        text_without_negated_items = re.sub(
+            r"\bno\s+critical\s+open\s+items?\b", "", text, flags=re.IGNORECASE
+        )
+        if re.search(r"critical open item", text_without_negated_items, re.IGNORECASE):
             errors.append("READY is incompatible with a critical open item")
 
     dynamic = re.compile(

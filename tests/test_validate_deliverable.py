@@ -86,6 +86,15 @@ class ValidateDeliverableTests(unittest.TestCase):
         text = text.replace("Evidence: 2", "Evidence: 1")
         assert "READY requires all completeness scores to equal 2" in validate_markdown(text)
 
+    def test_ready_allows_explicitly_negated_critical_open_items(self):
+        text = VALID_MARKDOWN.replace("Production readiness: NOT READY", "Production readiness: READY")
+        assert validate_markdown(text) == []
+
+    def test_ready_rejects_affirmative_critical_open_item(self):
+        text = VALID_MARKDOWN.replace("Production readiness: NOT READY", "Production readiness: READY")
+        text = text.replace("No critical open items.", "Critical open item: recovery target unknown.")
+        assert "READY is incompatible with a critical open item" in validate_markdown(text)
+
     def test_dynamic_fact_requires_official_url_and_date(self):
         text = VALID_MARKDOWN + "\nThe SLA is 99.95%.\n"
         assert "dynamic fact lacks nearby official evidence and retrieval date" in validate_markdown(text)
