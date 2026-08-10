@@ -10,7 +10,7 @@ Produce one self-contained Markdown report whose first visible content is exactl
 4. `## Logical architecture` — Mermaid logical diagram, or `Diagram degradation:` followed by components and textual flows.
 5. `## Deployment topology` — region, availability-zone, network, ingress, and recovery relationships.
 6. `## End-to-end data flow` — numbered flows including synchronous or asynchronous behavior, protocol, data type, storage, and failure handling.
-7. `## Volcengine product mapping` — the exact mapping table below.
+7. `## Volcengine product mapping` — the exact mapping table below, using canonical concrete product names from the routed domain references.
 8. `## Non-functional design` — capacity and elasticity, availability, RTO/RPO, security and compliance, observability, performance, and cost.
 9. `## Implementation roadmap` — proof of concept, minimum production, and scale phases with acceptance criteria.
 10. `## Risk and validation plan` — probability, impact, mitigation, owner, and validation method.
@@ -21,10 +21,12 @@ Produce one self-contained Markdown report whose first visible content is exactl
 
 Use this header exactly, including capitalization and column order:
 
-| Architecture capability | Recommended Volcengine product | Why it fits | Alternative | Switch condition | Evidence |
-| --- | --- | --- | --- | --- | --- |
+| Architecture capability | Recommended Volcengine product | Responsibility | Why it fits | Alternative | Switch condition | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
 
-Every recommendation requires evidence appropriate to the claim. Dynamic facts require an official source and a retrieved date. If no supported recommendation exists, name the required capability, state the uncertainty, and do not invent a product match.
+Every material row requires a concrete Volcengine product name, its responsibility in this architecture, a requirement-linked rationale, an alternative, an observable switch condition, and evidence appropriate to the claim. A generic category such as database, cache, object storage, container platform, or message queue is valid only in `Architecture capability`; it is not a product recommendation. Dynamic facts require an official source and a retrieved date. If no supported recommendation exists, name the required capability, state the uncertainty outside the recommendation row, and do not invent a product match.
+
+Use the same canonical product names in architecture decisions, Mermaid nodes, end-to-end flows, and the mapping table. Every concrete product shown as active in the Mermaid diagram must appear in `Recommended Volcengine product`, not only under `Alternative`.
 
 ## Completeness and readiness
 

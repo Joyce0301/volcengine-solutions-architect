@@ -62,7 +62,7 @@ flowchart LR
   A[App SDK events] --> I[Event intake API]
   B[Transaction service events] --> I
   C[Device gateway events] --> I
-  I --> K[Message Queue for Kafka]
+  I --> K[消息队列 Kafka版]
   K --> F[Streaming Computing Flink]
   F --> M[Realtime metrics serving table]
   M --> D[Operations dashboard]
@@ -97,16 +97,16 @@ flowchart LR
 8. ByteHouse or LAS serves dashboard history, complex analysis, and curated metric tables; expensive analysis is isolated from realtime dashboards.
 
 ## Volcengine product mapping
-| Architecture capability | Recommended Volcengine product | Why it fits | Alternative | Switch condition | Evidence |
-| --- | --- | --- | --- | --- | --- |
-| Replayable event buffer | 消息队列 Kafka版 | Kafka-compatible topic buffering fits multi-source event ingestion and replayable consumers | Direct service writes | If traffic is low and replay is not required | https://www.volcengine.com/docs/6439, Retrieved: 2026-08-09 |
-| Stateful realtime compute | 流式计算 Flink版 | Fits event-time aggregation, enrichment, checkpointed realtime ETL, and minute-level metrics | Batch-only DataLeap workflow | If freshness target moves to next-day only | https://www.volcengine.com/docs/6581, Retrieved: 2026-08-09 |
-| Raw event data lake | 对象存储 TOS | Provides object semantics for immutable event landing and replay base | 弹性文件存储 | If workloads require mounted shared file semantics | https://www.volcengine.com/docs/6349, Retrieved: 2026-08-09 |
-| Offline workflow governance | 大数据研发治理套件 DataLeap | Supports data development, workflow orchestration, governance, metadata, and quality management | Self-managed scheduler | If an existing governed scheduler is already mandated | https://www.volcengine.com/docs/6260, Retrieved: 2026-08-09 |
-| Analytics serving | ByteHouse 企业版 | Fits event-derived analytical tables and fast dashboard or analysis queries | 湖仓一体分析服务 LAS | If lakehouse-first shared data processing is preferred | https://www.volcengine.com/docs/6464/152221, Retrieved: 2026-08-09 |
-| Lakehouse analysis | 湖仓一体分析服务 LAS | Fits lakehouse analytics over shared data-lake storage | E-MapReduce | If Hadoop ecosystem control is required | https://www.volcengine.com/docs/86403/1829870?lang=zh, Retrieved: 2026-08-09 |
-| Private cloud boundary | 私有网络 | Provides isolated virtual networking, subnets, routes, and access controls | Public-only topology | Only acceptable for non-sensitive PoC | https://www.volcengine.com/docs/6401, Retrieved: 2026-08-09 |
-| Identity and encryption | IAM plus 密钥管理系统 | Centralizes authorization and managed key custody for data workflows | Long-lived embedded credentials | Not suitable for sensitive or audited data | https://www.volcengine.com/docs/6257/64959?lang=zh; https://www.volcengine.com/product/kms, Retrieved: 2026-08-09 |
+| Architecture capability | Recommended Volcengine product | Responsibility | Why it fits | Alternative | Switch condition | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| Replayable event buffer | 消息队列 Kafka版 | 承担Replayable event buffer | Kafka-compatible topic buffering fits multi-source event ingestion and replayable consumers | Direct service writes | If traffic is low and replay is not required | https://www.volcengine.com/docs/6439, Retrieved: 2026-08-09 |
+| Stateful realtime compute | 流式计算 Flink版 | 承担Stateful realtime compute | Fits event-time aggregation, enrichment, checkpointed realtime ETL, and minute-level metrics | Batch-only DataLeap workflow | If freshness target moves to next-day only | https://www.volcengine.com/docs/6581, Retrieved: 2026-08-09 |
+| Raw event data lake | 对象存储 TOS | 承担Raw event data lake | Provides object semantics for immutable event landing and replay base | 弹性文件存储 | If workloads require mounted shared file semantics | https://www.volcengine.com/docs/6349, Retrieved: 2026-08-09 |
+| Offline workflow governance | 大数据研发治理套件 DataLeap | 承担Offline workflow governance | Supports data development, workflow orchestration, governance, metadata, and quality management | Self-managed scheduler | If an existing governed scheduler is already mandated | https://www.volcengine.com/docs/6260, Retrieved: 2026-08-09 |
+| Analytics serving | ByteHouse 企业版 | 承担Analytics serving | Fits event-derived analytical tables and fast dashboard or analysis queries | 湖仓一体分析服务 LAS | If lakehouse-first shared data processing is preferred | https://www.volcengine.com/docs/6464/152221, Retrieved: 2026-08-09 |
+| Lakehouse analysis | 湖仓一体分析服务 LAS | 承担Lakehouse analysis | Fits lakehouse analytics over shared data-lake storage | E-MapReduce | If Hadoop ecosystem control is required | https://www.volcengine.com/docs/86403/1829870?lang=zh, Retrieved: 2026-08-09 |
+| Private cloud boundary | 私有网络 | 承担Private cloud boundary | Provides isolated virtual networking, subnets, routes, and access controls | Public-only topology | Only acceptable for non-sensitive PoC | https://www.volcengine.com/docs/6401, Retrieved: 2026-08-09 |
+| Identity and encryption | 访问控制 IAM plus 密钥管理系统 | 承担Identity and encryption | Centralizes authorization and managed key custody for data workflows | Long-lived embedded credentials | Not suitable for sensitive or audited data | https://www.volcengine.com/docs/6257/64959?lang=zh; https://www.volcengine.com/product/kms, Retrieved: 2026-08-09 |
 
 ## Non-functional design
 - Capacity and elasticity: model event rate, payload size, partitions, state size, dashboard concurrency, and backfill windows; capacity target requires runtime verification.

@@ -115,20 +115,20 @@ flowchart LR
 
 ## Volcengine product mapping
 
-| Architecture capability | Recommended Volcengine product | Why it fits | Alternative | Switch condition | Evidence |
-| --- | --- | --- | --- | --- | --- |
-| 模型访问与评估 | 火山方舟 | 作为统一模型访问层，承载推理、评估和应用开发支撑 | 应用直接接入具体模型 API | 若需要更强平台化模型生命周期治理，继续增强方舟侧评估流程 | https://www.volcengine.com/docs/82379/66619f8df281250274ef4f88?lang=zh Retrieved: 2026-08-09 |
-| 基础模型能力 | 豆包大模型 | 支撑中文制度、产品文档理解和生成 | 接入其他兼容模型 | 若评测集表现或数据处理条款不满足，切换模型或多模型路由 | https://www.volcengine.com/product/doubao-dy Retrieved: 2026-08-09 |
-| 知识检索 | VikingDB 向量数据库 | 保存文档切片向量并做语义召回 | 自建向量库 | 若元数据过滤、嵌入兼容或运维要求不匹配，改为自建或混合检索 | https://www.volcengine.com/sem Retrieved: 2026-08-09 |
-| 原文和解析产物 | 对象存储 TOS | 保存制度、产品文档原文、解析文本和索引中间产物 | 弹性文件存储 | 若必须以挂载文件协议访问，切换或并用弹性文件存储 | https://www.volcengine.com/docs/6349 Retrieved: 2026-08-09 |
-| 应用运行 | 容器服务 | 运行网关、编排、检索、文档处理和工单适配服务 | 云服务器 ECS 或函数服务 | 若团队缺少 Kubernetes 运维能力，采用更简单运行形态 | https://www.volcengine.com/docs/6460 Retrieved: 2026-08-09 |
-| 关系型状态 | 云数据库 PostgreSQL 版或 MySQL 版 | 保存元数据、权限映射、会话摘要、工具动作和审计索引 | veDB MySQL 版 | 若既有系统强依赖具体数据库协议，以兼容性测试结果为准 | https://www.volcengine.com/docs/6438 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6313 Retrieved: 2026-08-09 |
-| 缓存与短期状态 | 缓存数据库 Redis 版 | 缓存会话、热点权限和限流状态，不作为唯一持久记录 | 应用内缓存 | 若一致性要求高于缓存收益，可取消该层 | https://www.volcengine.com/docs/6293 Retrieved: 2026-08-09 |
-| 私有网络边界 | 私有网络 | 隔离应用、数据和运维访问路径 | 单平面网络 | 若安全分区要求降低，可简化子网但不取消最小权限 | https://www.volcengine.com/docs/6401 Retrieved: 2026-08-09 |
-| 入口分发 | 负载均衡 | 为企业助手 API 提供统一入口和后端健康检查 | 直接暴露单实例入口 | 若仅 PoC 内部使用，可临时简化 | https://www.volcengine.com/docs/6406 Retrieved: 2026-08-09 |
-| 身份与密钥 | IAM 与密钥管理系统 | 管理云资源访问、临时凭证和加密密钥 | 应用自管密钥 | 若企业已有统一密钥平台，需验证集成边界 | https://www.volcengine.com/docs/6257/64959?lang=zh Retrieved: 2026-08-09; https://www.volcengine.com/product/kms Retrieved: 2026-08-09 |
-| Web/API 防护 | Web应用防火墙与云防火墙 | 保护入口和网络边界，输出安全日志 | 仅安全组控制 | 若入口完全在企业专网内，可按风险评估调整 | https://www.volcengine.com/docs/6511 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6516 Retrieved: 2026-08-09 |
-| 数据治理编排 | DataLeap | 可用于文档处理任务编排、元数据治理和质量规则 | 轻量自建调度 | 若数据团队不使用治理平台，先用容器任务和流水线实现 | https://www.volcengine.com/docs/6260 Retrieved: 2026-08-09 |
+| Architecture capability | Recommended Volcengine product | Responsibility | Why it fits | Alternative | Switch condition | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| 模型访问与评估 | 火山方舟 | 承担模型访问与评估 | 作为统一模型访问层，承载推理、评估和应用开发支撑 | 应用直接接入具体模型 API | 若需要更强平台化模型生命周期治理，继续增强方舟侧评估流程 | https://www.volcengine.com/docs/82379/66619f8df281250274ef4f88?lang=zh Retrieved: 2026-08-09 |
+| 基础模型能力 | 豆包大模型 | 承担基础模型能力 | 支撑中文制度、产品文档理解和生成 | 接入其他兼容模型 | 若评测集表现或数据处理条款不满足，切换模型或多模型路由 | https://www.volcengine.com/product/doubao-dy Retrieved: 2026-08-09 |
+| 知识检索 | VikingDB 向量数据库 | 承担知识检索 | 保存文档切片向量并做语义召回 | 自建向量库 | 若元数据过滤、嵌入兼容或运维要求不匹配，改为自建或混合检索 | https://www.volcengine.com/sem Retrieved: 2026-08-09 |
+| 原文和解析产物 | 对象存储 TOS | 承担原文和解析产物 | 保存制度、产品文档原文、解析文本和索引中间产物 | 弹性文件存储 | 若必须以挂载文件协议访问，切换或并用弹性文件存储 | https://www.volcengine.com/docs/6349 Retrieved: 2026-08-09 |
+| 应用运行 | 容器服务 | 承担应用运行 | 运行网关、编排、检索、文档处理和工单适配服务 | 云服务器 ECS 或函数服务 | 若团队缺少 Kubernetes 运维能力，采用更简单运行形态 | https://www.volcengine.com/docs/6460 Retrieved: 2026-08-09 |
+| 关系型状态 | 云数据库 PostgreSQL 版或云数据库 MySQL 版 | 承担关系型状态 | 保存元数据、权限映射、会话摘要、工具动作和审计索引 | veDB MySQL 版 | 若既有系统强依赖具体数据库协议，以兼容性测试结果为准 | https://www.volcengine.com/docs/6438 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6313 Retrieved: 2026-08-09 |
+| 缓存与短期状态 | 缓存数据库 Redis 版 | 承担缓存与短期状态 | 缓存会话、热点权限和限流状态，不作为唯一持久记录 | 应用内缓存 | 若一致性要求高于缓存收益，可取消该层 | https://www.volcengine.com/docs/6293 Retrieved: 2026-08-09 |
+| 私有网络边界 | 私有网络 | 承担私有网络边界 | 隔离应用、数据和运维访问路径 | 单平面网络 | 若安全分区要求降低，可简化子网但不取消最小权限 | https://www.volcengine.com/docs/6401 Retrieved: 2026-08-09 |
+| 入口分发 | 负载均衡 | 承担入口分发 | 为企业助手 API 提供统一入口和后端健康检查 | 直接暴露单实例入口 | 若仅 PoC 内部使用，可临时简化 | https://www.volcengine.com/docs/6406 Retrieved: 2026-08-09 |
+| 身份与密钥 | 访问控制 IAM 与密钥管理系统 | 承担身份与密钥 | 管理云资源访问、临时凭证和加密密钥 | 应用自管密钥 | 若企业已有统一密钥平台，需验证集成边界 | https://www.volcengine.com/docs/6257/64959?lang=zh Retrieved: 2026-08-09; https://www.volcengine.com/product/kms Retrieved: 2026-08-09 |
+| Web/API 防护 | Web应用防火墙与云防火墙 | 承担Web/API 防护 | 保护入口和网络边界，输出安全日志 | 仅安全组控制 | 若入口完全在企业专网内，可按风险评估调整 | https://www.volcengine.com/docs/6511 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6516 Retrieved: 2026-08-09 |
+| 数据治理编排 | 大数据研发治理套件 DataLeap | 承担数据治理编排 | 可用于文档处理任务编排、元数据治理和质量规则 | 轻量自建调度 | 若数据团队不使用治理平台，先用容器任务和流水线实现 | https://www.volcengine.com/docs/6260 Retrieved: 2026-08-09 |
 
 ## Non-functional design
 

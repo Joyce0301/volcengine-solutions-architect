@@ -1,0 +1,57 @@
+{
+  "evidence_type": "deterministic forward acceptance fixture",
+  "note": "These transcripts define the observable conversation contract; they are not claimed as fresh model executions.",
+  "cases": [
+    {
+      "id": "vague_prompt_enters_single_question_interview",
+      "turns": [
+        {
+          "role": "user",
+          "content": "帮我在火山引擎上设计一个企业 AI 助手。"
+        },
+        {
+          "role": "assistant",
+          "phase": "interview",
+          "content": "## Requirements gap check\n\nKnown facts:\n- 目标是在火山引擎上建设企业 AI 助手。\n\nArchitecture-changing gaps:\n- 核心业务流与可执行动作边界未知。\n- 数据敏感性、权限隔离和网络边界未知。\n\nAssumptions if unanswered:\n- 可以先按企业内网、只读知识问答继续。\n\nQuestion: 这个助手最关键的业务流是只读知识问答，还是需要调用业务系统执行写操作？建议先从只读问答开始；不同答案会改变工具调用、审批和审计架构。"
+        }
+      ]
+    },
+    {
+      "id": "user_proceeds_with_defaults",
+      "turns": [
+        {
+          "role": "user",
+          "content": "我们有约 3 万份内部制度和产品文档，想做一个企业助手。"
+        },
+        {
+          "role": "assistant",
+          "phase": "interview",
+          "content": "## Requirements gap check\n\nArchitecture-changing gaps:\n- 文档权限隔离模型未知。\n\nQuestion: 文档是全员可见，还是必须按部门、岗位或密级做检索隔离？"
+        },
+        {
+          "role": "user",
+          "content": "按默认假设继续，直接给方案。"
+        },
+        {
+          "role": "assistant",
+          "phase": "report",
+          "report_fixture": "ai-agent.md"
+        }
+      ]
+    },
+    {
+      "id": "information_rich_prompt_skips_interview",
+      "turns": [
+        {
+          "role": "user",
+          "content": "为金融机构设计客户风险分析平台：数据敏感，通过专线私网接入，需完整身份、密钥、网络和数据审计，应用与数据分区，同城多故障域容灾并做异地备份；以私网 API、批任务和结果查询为主，关系型风险记录与对象归档分层存储。"
+        },
+        {
+          "role": "assistant",
+          "phase": "report",
+          "report_fixture": "regulated-finance.md"
+        }
+      ]
+    }
+  ]
+}

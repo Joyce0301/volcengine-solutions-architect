@@ -16,9 +16,9 @@ Design Volcengine architectures from business requirements. Start with gaps, sep
    - `Architecture-changing gaps`
    - `Assumptions if unanswered`
    If the first response is an interview, still start with this block and then ask only gated questions. If proceeding to a full proposal, keep this block as a required preface, then render the exact twelve-section proposal below.
-3. Ask only questions that pass the question-impact gate from `intake-contract.md`. Ask at most two rounds. If the user cannot answer or the second round is complete, proceed with explicit assumptions and switch conditions.
+3. Run the adaptive interview from `intake-contract.md`. Ask exactly one question per assistant turn, selecting the unresolved question with the highest architectural impact. Stop when no remaining answer can change the architecture, the user asks to proceed with defaults, or the interview reaches a hard ceiling of eight questions. Convert unresolved gaps into explicit assumptions and switch conditions.
 4. Read [references/routing-matrix.md](references/routing-matrix.md). Assign scenario, quality, and constraint labels with a one-line rationale for each label. In any full proposal, write the fenced `routing:` record before `## Architecture decisions`; do not make product or topology decisions before this record is visible.
-5. Load [references/product-catalog.md](references/product-catalog.md), then load only the domain references selected by routing:
+5. Load [references/product-catalog.md](references/product-catalog.md) and its canonical [references/product-registry.json](references/product-registry.json), then load only the domain references selected by routing:
    - `AI_AGENT` -> [references/ai-and-agent.md](references/ai-and-agent.md)
    - `CLOUD_NATIVE` -> [references/compute-cloud-native.md](references/compute-cloud-native.md)
    - `BATCH_DATA` or `REALTIME_DATA` -> [references/data-analytics.md](references/data-analytics.md)
@@ -27,10 +27,10 @@ Design Volcengine architectures from business requirements. Start with gaps, sep
    - `MEDIA` or `EDGE` -> [references/media-edge.md](references/media-edge.md)
 6. Verify dynamic facts at runtime before relying on them: price, region, specification, quota, SLA, version status, promotion, exact limits, or current model/product availability. If you assert a dynamic fact, the same paragraph or table cell must include an official `volcengine.com` URL and `Retrieved: YYYY-MM-DD` or `查询日期：YYYY-MM-DD`. If network access is unavailable or you choose not to verify, do not assert the dynamic value; state the field is `unknown` or `requires runtime verification` and keep it in open items without naming concrete prices, regions, quotas, SLAs, percentages, QPS/TPS values, exact limits, model availability, or specification values. Use validator-safe synonyms for unverified topology and commercial facts: `deployment location`, `commercial terms`, `capacity target`, `service target`, and `runtime verification required`. Write `secure HTTP` instead of `HTTPS` unless the same paragraph includes official evidence and retrieval date.
 7. If the routing matrix calls for role work, read [references/subagent-contracts.md](references/subagent-contracts.md), then choose execution mode. Dispatch the relevant contracts when subagents are available; otherwise run the same contracts serially in the main context. The main Skill owns conflict resolution and the final answer.
-8. Integrate domain findings into one architecture. Include alternatives and switch conditions for every material product recommendation or topology choice.
+8. Integrate domain findings into one architecture. Map every material capability to a concrete Volcengine product when official evidence supports the match. Include its responsibility, rationale, alternative, and switch condition; otherwise keep the capability unresolved instead of inventing a product.
 9. Review the candidate explicitly for security, reliability, observability, and cost. When `REGULATED`, `HIGH_AVAILABILITY`, or `DISASTER_RECOVERY` is present, include an independent security/reliability review result. When `COST_SENSITIVE` or material scale is supplied, include FinOps findings.
 10. Render the final proposal using the exact twelve-section output below. Read [references/architecture-output.md](references/architecture-output.md) for field details and scoring rules.
-11. Read [references/report-contract.md](references/report-contract.md). When architecture-changing question rounds are complete, write the final architecture result and all supporting details to `reports/volcengine-architecture-report.md` (or the caller-requested report path). The report is the source of truth; do not return a completed architecture only in chat without creating the report.
+11. Read [references/report-contract.md](references/report-contract.md). When the adaptive interview is complete or has exited with explicit assumptions, write the final architecture result and all supporting details to `reports/volcengine-architecture-report.md` (or the caller-requested report path). The report is the source of truth; do not return a completed architecture only in chat without creating the report.
 12. For the report Markdown deliverable, run:
 
 ```text
@@ -41,9 +41,9 @@ python3 "<SKILL_ROOT>/scripts/validate-deliverable.py" <markdown_file>
 
 ## Question Rules
 
-Ask a question only when a different answer can change product category, topology, data flow or storage, security/compliance, capacity/cost, or delivery phase.
+Ask a question only when a different answer can change product category, topology, data flow or storage, security/compliance, capacity/cost, or delivery phase. Ask exactly one question per assistant turn. State the recommended answer when a safe default exists and briefly name the decision that different answers would change.
 
-Do not ask questions that merely make the brief more complete. After two rounds, continue with assumptions in this form:
+Do not ask questions that merely make the brief more complete or repeat supplied facts. After each answer, update `ArchitectureBrief` and select the next highest-impact gap. End automatically when no unresolved question can materially change the architecture. If the user says `proceed with defaults`, asks for a proposal now, cannot answer, or the interview reaches the hard ceiling of eight questions, continue with assumptions in this form:
 
 ```text
 Assumption: <assumed condition>.
@@ -87,7 +87,8 @@ Every final proposal must contain:
 - Mermaid logical architecture or an explicit `Diagram degradation:` notice.
 - Deployment topology covering deployment location or unresolved deployment location, availability zones, VPC, subnets, ingress, and disaster recovery relationships. Use the literal word `region` only with official evidence and retrieval date in the same paragraph.
 - Numbered end-to-end flows with sync/async behavior, protocol, data type, storage, and failure handling.
-- Product mapping rows with alternative and switch condition.
+- Product mapping rows with a concrete product name, responsibility, requirement-linked rationale, alternative, switch condition, and official evidence. Generic labels such as database, cache, object storage, or message queue may identify a capability but may not replace the product name.
+- Consistent concrete product names across architecture decisions, Mermaid nodes, end-to-end flows, and the product mapping table.
 - Security, reliability, observability, performance, and cost coverage.
 - PoC, minimum production, and scale phases with acceptance criteria.
 - Risks with probability, impact, mitigation, owner, and validation method.
@@ -126,8 +127,8 @@ routing:
 Use this product mapping header exactly:
 
 ```markdown
-| Architecture capability | Recommended Volcengine product | Why it fits | Alternative | Switch condition | Evidence |
-| --- | --- | --- | --- | --- | --- |
+| Architecture capability | Recommended Volcengine product | Responsibility | Why it fits | Alternative | Switch condition | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
 ```
 
 Every product mapping `Evidence` cell must include an official `volcengine.com` URL and `Retrieved: YYYY-MM-DD`, even when the URL is only a discovery entry and runtime verification is still required.
@@ -155,7 +156,8 @@ The first response may be an interview when architecture-changing facts are miss
 | Baseline failure | Required correction |
 | --- | --- |
 | Solution starts before gaps | Start with known facts, architecture-changing gaps, and assumptions. |
-| Questions are broad or endless | Ask only question-impact-gate questions and stop after two rounds. |
+| Questions are broad, bundled, or endless | Ask one highest-impact question per turn and stop adaptively, with a hard ceiling of eight. |
+| Products remain generic capability labels | Use the canonical concrete product name from the routed domain reference or mark the match unresolved. |
 | Facts and assumptions blur | Maintain separate facts, assumptions, open items, and evidence. |
 | Products are single-path | Add alternatives and switch conditions to each material choice. |
 | Security, reliability, observability, or cost is thin | Add explicit coverage in `Non-functional design` and risk review. |

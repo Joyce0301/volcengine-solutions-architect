@@ -104,17 +104,17 @@ flowchart LR
 
 ## Volcengine product mapping
 
-| Architecture capability | Recommended Volcengine product | Why it fits | Alternative | Switch condition | Evidence |
-| --- | --- | --- | --- | --- | --- |
-| 模型访问与问答生成 | 火山方舟 + 豆包大模型 | 托管模型访问、推理、评测和应用开发支撑适合客服问答链路 | 应用直连其他模型服务 | 如果模型能力、数据处理条款或部署控制不满足要求则替换 | https://www.volcengine.com/docs/82379/66619f8df281250274ef4f88?lang=zh Retrieved: 2026-08-09; https://www.volcengine.com/product/doubao-dy Retrieved: 2026-08-09 |
-| 企业知识检索 | VikingDB 向量数据库 | 适合语义检索、相似度召回和 RAG grounding | 关系库全文检索或外部检索服务 | 如果权限过滤、嵌入兼容或更新延迟不满足要求则替换 | https://www.volcengine.com/sem Retrieved: 2026-08-09 |
-| 智能体/流程编排候选 | 扣子或 HiAgent | 可作为托管智能体和企业知识应用建设候选 | 应用自管编排 | 如果接管、工具审批、隔离或连接器不满足生产治理则自管 | https://www.volcengine.com/sem Retrieved: 2026-08-09 |
-| 会话元数据与工单状态 | 云数据库 MySQL 版或 PostgreSQL 版 | 适合事务型会话、客户、工单、状态流转数据 | 文档数据库 MongoDB 版 | 如果领域对象更偏文档且查询模式匹配则切换 | https://www.volcengine.com/docs/6313 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6438 Retrieved: 2026-08-09 |
-| 录音、转写、知识原文与分析明细 | 对象存储 TOS | 适合非结构化对象、数据湖落地和生命周期管理 | 弹性文件存储 | 如果应用必须共享挂载文件语义则切换 | https://www.volcengine.com/docs/6349 Retrieved: 2026-08-09 |
-| 经营分析治理 | DataLeap + LAS 候选 | 支持数据开发、治理和湖仓分析形态 | E-MapReduce | 如果需要 Hadoop/Spark 集群级控制或兼容既有生态则切换 | https://www.volcengine.com/docs/6260 Retrieved: 2026-08-09; https://www.volcengine.com/docs/86403/1829870?lang=zh Retrieved: 2026-08-09 |
-| 私网与入口 | VPC + 负载均衡 + WAF | 支持隔离网络、入口分发和 Web/API 防护 | 仅公网服务入口 | 如果无公网客服入口且仅内网使用，可收窄入口形态 | https://www.volcengine.com/docs/6401 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6406 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6511 Retrieved: 2026-08-09 |
-| 身份与密钥 | IAM + KMS | 支持集中授权和密钥治理 | 应用内自管密钥 | 如果有外部 KMS 或合规指定密钥体系则调整 | https://www.volcengine.com/docs/6257/64959?lang=zh Retrieved: 2026-08-09; https://www.volcengine.com/product/kms Retrieved: 2026-08-09 |
-| 实时语音会话候选 | veRTC | 可作为互动音视频链路候选；电话 CTI 适配仍需确认 | 现有呼叫中心/运营商平台 | 如果电话链路由既有 CTI 承担，则 veRTC 只用于在线音视频扩展 | https://www.volcengine.com/docs/6348 Retrieved: 2026-08-09 |
+| Architecture capability | Recommended Volcengine product | Responsibility | Why it fits | Alternative | Switch condition | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| 模型访问与问答生成 | 火山方舟 + 豆包大模型 | 承担模型访问与问答生成 | 托管模型访问、推理、评测和应用开发支撑适合客服问答链路 | 应用直连其他模型服务 | 如果模型能力、数据处理条款或部署控制不满足要求则替换 | https://www.volcengine.com/docs/82379/66619f8df281250274ef4f88?lang=zh Retrieved: 2026-08-09; https://www.volcengine.com/product/doubao-dy Retrieved: 2026-08-09 |
+| 企业知识检索 | VikingDB 向量数据库 | 承担企业知识检索 | 适合语义检索、相似度召回和 RAG grounding | 关系库全文检索或外部检索服务 | 如果权限过滤、嵌入兼容或更新延迟不满足要求则替换 | https://www.volcengine.com/sem Retrieved: 2026-08-09 |
+| 智能体/流程编排候选 | 扣子或 HiAgent | 承担智能体/流程编排候选 | 可作为托管智能体和企业知识应用建设候选 | 应用自管编排 | 如果接管、工具审批、隔离或连接器不满足生产治理则自管 | https://www.volcengine.com/sem Retrieved: 2026-08-09 |
+| 会话元数据与工单状态 | 云数据库 MySQL 版或云数据库 PostgreSQL 版 | 承担会话元数据与工单状态 | 适合事务型会话、客户、工单、状态流转数据 | 文档数据库 MongoDB 版 | 如果领域对象更偏文档且查询模式匹配则切换 | https://www.volcengine.com/docs/6313 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6438 Retrieved: 2026-08-09 |
+| 录音、转写、知识原文与分析明细 | 对象存储 TOS | 承担录音、转写、知识原文与分析明细 | 适合非结构化对象、数据湖落地和生命周期管理 | 弹性文件存储 | 如果应用必须共享挂载文件语义则切换 | https://www.volcengine.com/docs/6349 Retrieved: 2026-08-09 |
+| 经营分析治理 | 大数据研发治理套件 DataLeap + 湖仓一体分析服务 LAS | 承担经营分析治理 | 支持数据开发、治理和湖仓分析形态 | E-MapReduce | 如果需要 Hadoop/Spark 集群级控制或兼容既有生态则切换 | https://www.volcengine.com/docs/6260 Retrieved: 2026-08-09; https://www.volcengine.com/docs/86403/1829870?lang=zh Retrieved: 2026-08-09 |
+| 私网与入口 | 私有网络 + 负载均衡 + Web应用防火墙 | 承担私网与入口 | 支持隔离网络、入口分发和 Web/API 防护 | 仅公网服务入口 | 如果无公网客服入口且仅内网使用，可收窄入口形态 | https://www.volcengine.com/docs/6401 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6406 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6511 Retrieved: 2026-08-09 |
+| 身份与密钥 | 访问控制 IAM + 密钥管理系统 | 承担身份与密钥 | 支持集中授权和密钥治理 | 应用内自管密钥 | 如果有外部 KMS 或合规指定密钥体系则调整 | https://www.volcengine.com/docs/6257/64959?lang=zh Retrieved: 2026-08-09; https://www.volcengine.com/product/kms Retrieved: 2026-08-09 |
+| 实时语音会话候选 | 实时音视频 veRTC | 承担实时语音会话候选 | 可作为互动音视频链路候选；电话 CTI 适配仍需确认 | 现有呼叫中心/运营商平台 | 如果电话链路由既有 CTI 承担，则 veRTC 只用于在线音视频扩展 | https://www.volcengine.com/docs/6348 Retrieved: 2026-08-09 |
 
 ## Non-functional design
 

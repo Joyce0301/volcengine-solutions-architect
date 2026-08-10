@@ -1,6 +1,6 @@
 {
   "name": "volcengine-architecture",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Evidence-backed Volcengine architecture design for Codex.",
   "author": {
     "name": "Volcengine Architecture"
@@ -13,6 +13,6 @@
     "developerName": "Volcengine Architecture",
     "category": "Productivity",
     "capabilities": [],
-    "defaultPrompt": "Use $design-volcengine-architecture to turn my business requirements into a Volcengine architecture."
+    "defaultPrompt": "Use $design-volcengine-architecture to interview me about architecture-changing requirements and produce a concrete Volcengine product architecture."
   }
 }

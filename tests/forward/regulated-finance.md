@@ -87,8 +87,8 @@ flowchart LR
   C --> D[应用服务区]
   D --> E[风险评分服务]
   D --> F[批量特征加工]
-  E --> G[托管关系型数据库]
-  F --> H[对象存储数据层]
+  E --> G[云数据库 MySQL 版<br/>引擎待兼容性确认]
+  F --> H[对象存储 TOS]
   D --> I[日志与审计汇聚]
   G --> I
   H --> I
@@ -117,17 +117,17 @@ flowchart LR
 
 ## Volcengine product mapping
 
-| Architecture capability | Recommended Volcengine product | Why it fits | Alternative | Switch condition | Evidence |
-| --- | --- | --- | --- | --- | --- |
-| 私有网络边界 | 私有网络 | 提供隔离网络、子网、路由和安全组能力，适合金融生产分区 | 多账号多 VPC 拆分 | If 多法人、多业务线或强隔离要求成立，则拆分网络和账号 | https://www.volcengine.com/docs/6401 Retrieved: 2026-08-09 |
-| 机构到云专网接入 | 专线连接 | 支持数据中心到云上私网的专用连接模式 | VPN | If 仅 PoC 且风险评审允许，可短期使用加密隧道 | https://www.volcengine.com/docs/6407 Retrieved: 2026-08-09 |
-| 内部流量分发 | 负载均衡 | 为多后端服务提供统一入口、健康检查和流量分发 | 应用自建反向代理 | If 协议或源地址保留需求不满足，则评估自建代理 | https://www.volcengine.com/docs/6406 Retrieved: 2026-08-09 |
-| 身份与权限 | 访问控制 IAM | 支持身份、策略、角色和临时凭证治理 | 应用内账号体系 | If 仅管应用内权限，云资源权限仍由 IAM 管控 | https://www.volcengine.com/docs/6257/64959?lang=zh Retrieved: 2026-08-09 |
-| 密钥与加密 | 密钥管理系统 | 支持托管密钥、加密操作和密钥治理 | 应用自管密钥 | If 监管要求特殊密钥托管模型，则另行评估 | https://www.volcengine.com/product/kms Retrieved: 2026-08-09 |
-| 网络边界审计与防护 | 云防火墙 | 用于网络边界策略、流量可视和安全审计 | 仅安全组和网络 ACL | If 流量路径极简且安全评审接受，可先用基础网络策略 | https://www.volcengine.com/docs/6516 Retrieved: 2026-08-09 |
-| 关系型数据存储 | 云数据库 MySQL 版或云数据库 PostgreSQL 版 | 适合风险记录、任务状态和结果持久化，具体引擎按应用兼容性选择 | veDB MySQL 版 | If 读扩展和云原生数据库能力更关键，则验证 veDB MySQL 兼容性 | https://www.volcengine.com/docs/6313 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6438 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6357 Retrieved: 2026-08-09 |
-| 对象与归档数据 | 对象存储 TOS | 适合原始文件、离线特征、审计导出和备份归档 | 弹性文件存储 | If 应用必须使用挂载文件协议，则评估弹性文件存储 | https://www.volcengine.com/docs/6349 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6453 Retrieved: 2026-08-09 |
-| 数据研发治理 | DataLeap | 可承载数据开发、调度、元数据和质量治理工作 | E-MapReduce 或 LAS | If 需 Hadoop 生态控制选 E-MapReduce；If 湖仓分析为主选 LAS | https://www.volcengine.com/docs/6260 Retrieved: 2026-08-09; https://www.volcengine.com/docs/86403/1829870?lang=zh Retrieved: 2026-08-09 |
+| Architecture capability | Recommended Volcengine product | Responsibility | Why it fits | Alternative | Switch condition | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| 私有网络边界 | 私有网络 | 承担私有网络边界 | 提供隔离网络、子网、路由和安全组能力，适合金融生产分区 | 多账号多 VPC 拆分 | If 多法人、多业务线或强隔离要求成立，则拆分网络和账号 | https://www.volcengine.com/docs/6401 Retrieved: 2026-08-09 |
+| 机构到云专网接入 | 专线连接 | 承担机构到云专网接入 | 支持数据中心到云上私网的专用连接模式 | VPN | If 仅 PoC 且风险评审允许，可短期使用加密隧道 | https://www.volcengine.com/docs/6407 Retrieved: 2026-08-09 |
+| 内部流量分发 | 负载均衡 | 承担内部流量分发 | 为多后端服务提供统一入口、健康检查和流量分发 | 应用自建反向代理 | If 协议或源地址保留需求不满足，则评估自建代理 | https://www.volcengine.com/docs/6406 Retrieved: 2026-08-09 |
+| 身份与权限 | 访问控制 IAM | 承担身份与权限 | 支持身份、策略、角色和临时凭证治理 | 应用内账号体系 | If 仅管应用内权限，云资源权限仍由 IAM 管控 | https://www.volcengine.com/docs/6257/64959?lang=zh Retrieved: 2026-08-09 |
+| 密钥与加密 | 密钥管理系统 | 承担密钥与加密 | 支持托管密钥、加密操作和密钥治理 | 应用自管密钥 | If 监管要求特殊密钥托管模型，则另行评估 | https://www.volcengine.com/product/kms Retrieved: 2026-08-09 |
+| 网络边界审计与防护 | 云防火墙 | 承担网络边界审计与防护 | 用于网络边界策略、流量可视和安全审计 | 仅安全组和网络 ACL | If 流量路径极简且安全评审接受，可先用基础网络策略 | https://www.volcengine.com/docs/6516 Retrieved: 2026-08-09 |
+| 关系型数据存储 | 云数据库 MySQL 版或云数据库 PostgreSQL 版 | 承担关系型数据存储 | 适合风险记录、任务状态和结果持久化，具体引擎按应用兼容性选择 | veDB MySQL 版 | If 读扩展和云原生数据库能力更关键，则验证 veDB MySQL 兼容性 | https://www.volcengine.com/docs/6313 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6438 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6357 Retrieved: 2026-08-09 |
+| 对象与归档数据 | 对象存储 TOS | 承担对象与归档数据 | 适合原始文件、离线特征、审计导出和备份归档 | 弹性文件存储 | If 应用必须使用挂载文件协议，则评估弹性文件存储 | https://www.volcengine.com/docs/6349 Retrieved: 2026-08-09; https://www.volcengine.com/docs/6453 Retrieved: 2026-08-09 |
+| 数据研发治理 | 大数据研发治理套件 DataLeap | 承担数据研发治理 | 可承载数据开发、调度、元数据和质量治理工作 | E-MapReduce 或 LAS | If 需 Hadoop 生态控制选 E-MapReduce；If 湖仓分析为主选 LAS | https://www.volcengine.com/docs/6260 Retrieved: 2026-08-09; https://www.volcengine.com/docs/86403/1829870?lang=zh Retrieved: 2026-08-09 |
 
 ## Non-functional design
 

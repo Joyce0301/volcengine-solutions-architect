@@ -2,6 +2,8 @@
 
 Use this catalog to route architecture work, not to assert current commercial availability. Product records in the linked references contain stable capability labels and official discovery entry points only. Before recommending a concrete deployment, recheck every listed dynamic field against the official page for the target account and deployment context.
 
+Canonical product labels and common aliases are indexed in [product-registry.json](product-registry.json). The registry is the machine-readable source for report validation; domain references remain the source for capability, selection, and evidence guidance.
+
 ## Family routing
 
 | Need | Reference | Official indexes |
@@ -16,6 +18,7 @@ Use this catalog to route architecture work, not to assert current commercial av
 ## Selection rules
 
 - Route by required capability and operating model before choosing a named product.
+- Use the exact `product_name` from the selected domain reference as the canonical report label. Add a common abbreviation only after the canonical name; never replace the canonical name with a generic category or abbreviation alone.
 - Treat adjacent families as composable: for example, an AI service may still require compute, storage, networking, security and observability decisions.
 - A product name here proves only that an official discovery entry existed when this reference was built. It does not prove availability or suitability for a region, account, workload or compliance regime.
 - Recheck `region`, `price`, `specification`, `quota`, `SLA` and `version` at design time, record the query date, and cite the exact official page used.
