@@ -1,4 +1,13 @@
+---
+name: design-volcengine-data-analytics
+description: Design Volcengine batch, streaming, lakehouse, warehouse, and data-governance architectures. Use for ingestion, Kafka, Flink, DataLeap, LAS, ByteHouse, replay, and analytical serving decisions.
+---
+
 # Data and Analytics
+
+## Standalone invocation
+
+When invoked directly, design only the requested data and analytics domain boundary. Separate known facts, assumptions, and architecture-changing gaps; then map each material capability to a canonical product from this skill. For every recommendation include responsibility, rationale, alternative, switch condition, and official discovery URL. Add a retrieval date only after opening that official page during the current task; otherwise mark runtime verification required. Keep unverified dynamic facts unresolved and identify shared storage, compute, network, security, or serving dependencies for other skills.
 
 ## Capability decomposition
 

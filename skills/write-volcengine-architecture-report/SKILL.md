@@ -1,4 +1,13 @@
+---
+name: write-volcengine-architecture-report
+description: Write and quality-gate the final Volcengine architecture report. Use when persisting a completed architecture, validating its Markdown contract, and returning the report path with decisions and open items.
+---
+
 # Final Architecture Report Contract
+
+## Standalone invocation
+
+When invoked directly, accept a completed architecture candidate, write it to the requested path or the default path below, run the shared validator, and fix structural failures before returning. Return the absolute report path plus a concise summary of decisions, assumptions, and blocking open items. Do not perform product research or invent missing architecture decisions in this persistence step.
 
 A completed architecture is not complete until the final result and its supporting details are written to a self-contained Markdown report. The report is the source of truth for handoff, review, implementation, and later updates; the chat response is only a concise summary.
 
@@ -11,7 +20,7 @@ A completed architecture is not complete until the final result and its supporti
 
 ## Required report content
 
-The report must contain the exact twelve-section architecture output contract from `architecture-output.md`, plus enough detail for another architect to reproduce the decisions. Include:
+The report must contain the exact twelve-section architecture output contract from `$render-volcengine-architecture`, plus enough detail for another architect to reproduce the decisions. Include:
 
 - requirements gaps, known facts, user answers, assumptions, switch conditions, and unresolved items;
 - executive recommendation, scope boundary, and material trade-offs;
@@ -30,4 +39,4 @@ Keep facts, assumptions, and open items visibly separate. Summarize the resultin
 
 ## Quality gate
 
-Run `scripts/validate-deliverable.py` against the report path and fix all structural errors before returning it. Return the absolute report path and summarize the final decisions, key assumptions, and blocking open items. A passing validator confirms the report contract is present; it does not replace technical review.
+Run `../design-volcengine-architecture/scripts/validate-deliverable.py` against the report path and fix all structural errors before returning it. Return the absolute report path and summarize the final decisions, key assumptions, and blocking open items. A passing validator confirms the report contract is present; it does not replace technical review.

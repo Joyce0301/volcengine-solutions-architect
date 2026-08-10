@@ -6,7 +6,6 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 VALIDATOR_PATH = (
     ROOT
-    / "volcengine-architecture"
     / "skills"
     / "design-volcengine-architecture"
     / "scripts"

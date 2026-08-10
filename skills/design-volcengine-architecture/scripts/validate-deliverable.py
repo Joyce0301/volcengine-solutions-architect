@@ -22,7 +22,11 @@ REQUIRED_SECTIONS = (
     "Completeness score",
 )
 SCORE_NAMES = ("Requirements", "Architecture", "Security", "Reliability", "Cost", "Evidence")
-PRODUCT_REGISTRY_PATH = Path(__file__).resolve().parent.parent / "references" / "product-registry.json"
+PRODUCT_REGISTRY_PATH = (
+    Path(__file__).resolve().parents[2]
+    / "select-volcengine-products"
+    / "product-registry.json"
+)
 
 
 def load_product_registry() -> tuple[dict[str, object], ...]:

@@ -12,7 +12,7 @@ GitHub: <https://github.com/Joyce0301/volcengine-solutions-architect>
 Joyce0301/volcengine-solutions-architect
 ```
 
-插件清单位于仓库中的 `volcengine-architecture/.codex-plugin/plugin.json`。
+插件清单位于仓库根目录的 `.codex-plugin/plugin.json`。
 
 ## 触发方式
 
@@ -47,6 +47,25 @@ $design-volcengine-architecture
 ```
 
 如果希望触发结果稳定，建议显式写出 `$design-volcengine-architecture`。
+
+### 独立调用子 Skill
+
+除了总入口，也可以只调用某个阶段或领域：
+
+| 用途 | Skill |
+| --- | --- |
+| 需求访谈 | `$interview-volcengine-requirements` |
+| 场景与评审路由 | `$route-volcengine-architecture` |
+| 火山引擎产品选型 | `$select-volcengine-products` |
+| AI 与 Agent | `$design-volcengine-ai-agent` |
+| 云原生与计算 | `$design-volcengine-cloud-native` |
+| 大数据与实时分析 | `$design-volcengine-data-analytics` |
+| 数据库与存储 | `$design-volcengine-database-storage` |
+| 音视频与边缘 | `$design-volcengine-media-edge` |
+| 网络与安全 | `$design-volcengine-network-security` |
+| 架构报告结构 | `$render-volcengine-architecture` |
+| 报告落盘与质量门 | `$write-volcengine-architecture-report` |
+| 多角色分析契约 | `$coordinate-volcengine-architecture-roles` |
 
 ## 推荐调用模板
 
@@ -140,12 +159,25 @@ Skill 通常按以下顺序工作：
 ## 目录结构
 
 ```text
-volcengine-architecture/
-├── .codex-plugin/plugin.json
-└── skills/design-volcengine-architecture/
-    ├── SKILL.md
-    ├── references/
-    └── scripts/validate-deliverable.py
+.codex-plugin/plugin.json
+skills/
+├── design-volcengine-architecture/
+│   ├── SKILL.md
+│   └── scripts/validate-deliverable.py
+├── interview-volcengine-requirements/SKILL.md
+├── route-volcengine-architecture/SKILL.md
+├── select-volcengine-products/
+│   ├── SKILL.md
+│   └── product-registry.json
+├── design-volcengine-ai-agent/SKILL.md
+├── design-volcengine-cloud-native/SKILL.md
+├── design-volcengine-data-analytics/SKILL.md
+├── design-volcengine-database-storage/SKILL.md
+├── design-volcengine-media-edge/SKILL.md
+├── design-volcengine-network-security/SKILL.md
+├── render-volcengine-architecture/SKILL.md
+├── write-volcengine-architecture-report/SKILL.md
+└── coordinate-volcengine-architecture-roles/SKILL.md
 ```
 
-如需了解完整契约、产品参考资料和验证规则，请阅读 [SKILL.md](volcengine-architecture/skills/design-volcengine-architecture/SKILL.md)。
+总编排入口见 [SKILL.md](skills/design-volcengine-architecture/SKILL.md)；其他目录都是可独立发现和调用的 Skill。

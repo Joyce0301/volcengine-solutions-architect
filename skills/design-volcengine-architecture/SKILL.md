@@ -9,28 +9,28 @@ Design Volcengine architectures from business requirements. Start with gaps, sep
 
 ## Core Workflow
 
-1. Read [references/intake-contract.md](references/intake-contract.md) before asking or designing. Normalize the request into `ArchitectureBrief` fields.
+1. Use `$interview-volcengine-requirements` before asking or designing. Normalize the request into `ArchitectureBrief` fields.
 2. The first visible content in any architecture response must be this exact requirements gap block, before executive summary, questions, routing, products, topology, or recommendations:
    - `## Requirements gap check`
    - `Known facts`
    - `Architecture-changing gaps`
    - `Assumptions if unanswered`
    If the first response is an interview, still start with this block and then ask only gated questions. If proceeding to a full proposal, keep this block as a required preface, then render the exact twelve-section proposal below.
-3. Run the adaptive interview from `intake-contract.md`. Ask exactly one question per assistant turn, selecting the unresolved question with the highest architectural impact. Stop when no remaining answer can change the architecture, the user asks to proceed with defaults, or the interview reaches a hard ceiling of eight questions. Convert unresolved gaps into explicit assumptions and switch conditions.
-4. Read [references/routing-matrix.md](references/routing-matrix.md). Assign scenario, quality, and constraint labels with a one-line rationale for each label. In any full proposal, write the fenced `routing:` record before `## Architecture decisions`; do not make product or topology decisions before this record is visible.
-5. Load [references/product-catalog.md](references/product-catalog.md) and its canonical [references/product-registry.json](references/product-registry.json), then load only the domain references selected by routing:
-   - `AI_AGENT` -> [references/ai-and-agent.md](references/ai-and-agent.md)
-   - `CLOUD_NATIVE` -> [references/compute-cloud-native.md](references/compute-cloud-native.md)
-   - `BATCH_DATA` or `REALTIME_DATA` -> [references/data-analytics.md](references/data-analytics.md)
-   - `DATABASE` or `STORAGE` -> [references/database-storage.md](references/database-storage.md)
-   - `PRIVATE_NETWORK`, `DATA_RESIDENCY`, `REGULATED`, or public ingress/security review -> [references/networking-security.md](references/networking-security.md)
-   - `MEDIA` or `EDGE` -> [references/media-edge.md](references/media-edge.md)
+3. Run the adaptive interview defined by `$interview-volcengine-requirements`. Ask exactly one question per assistant turn, selecting the unresolved question with the highest architectural impact. Stop when no remaining answer can change the architecture, the user asks to proceed with defaults, or the interview reaches a hard ceiling of eight questions. Convert unresolved gaps into explicit assumptions and switch conditions.
+4. Use `$route-volcengine-architecture`. Assign scenario, quality, and constraint labels with a one-line rationale for each label. In any full proposal, write the fenced `routing:` record before `## Architecture decisions`; do not make product or topology decisions before this record is visible.
+5. Use `$select-volcengine-products`, then invoke only the independently callable domain skills selected by routing:
+   - `AI_AGENT` -> `$design-volcengine-ai-agent`
+   - `CLOUD_NATIVE` -> `$design-volcengine-cloud-native`
+   - `BATCH_DATA` or `REALTIME_DATA` -> `$design-volcengine-data-analytics`
+   - `DATABASE` or `STORAGE` -> `$design-volcengine-database-storage`
+   - `PRIVATE_NETWORK`, `DATA_RESIDENCY`, `REGULATED`, or public ingress/security review -> `$design-volcengine-network-security`
+   - `MEDIA` or `EDGE` -> `$design-volcengine-media-edge`
 6. Verify dynamic facts at runtime before relying on them: price, region, specification, quota, SLA, version status, promotion, exact limits, or current model/product availability. If you assert a dynamic fact, the same paragraph or table cell must include an official `volcengine.com` URL and `Retrieved: YYYY-MM-DD` or `查询日期：YYYY-MM-DD`. If network access is unavailable or you choose not to verify, do not assert the dynamic value; state the field is `unknown` or `requires runtime verification` and keep it in open items without naming concrete prices, regions, quotas, SLAs, percentages, QPS/TPS values, exact limits, model availability, or specification values. Use validator-safe synonyms for unverified topology and commercial facts: `deployment location`, `commercial terms`, `capacity target`, `service target`, and `runtime verification required`. Write `secure HTTP` instead of `HTTPS` unless the same paragraph includes official evidence and retrieval date.
-7. If the routing matrix calls for role work, read [references/subagent-contracts.md](references/subagent-contracts.md), then choose execution mode. Dispatch the relevant contracts when subagents are available; otherwise run the same contracts serially in the main context. The main Skill owns conflict resolution and the final answer.
+7. If routing calls for role work, use `$coordinate-volcengine-architecture-roles`, then choose execution mode. Dispatch the relevant contracts when subagents are available; otherwise run the same contracts serially in the main context. The main Skill owns conflict resolution and the final answer.
 8. Integrate domain findings into one architecture. Map every material capability to a concrete Volcengine product when official evidence supports the match. Include its responsibility, rationale, alternative, and switch condition; otherwise keep the capability unresolved instead of inventing a product.
 9. Review the candidate explicitly for security, reliability, observability, and cost. When `REGULATED`, `HIGH_AVAILABILITY`, or `DISASTER_RECOVERY` is present, include an independent security/reliability review result. When `COST_SENSITIVE` or material scale is supplied, include FinOps findings.
-10. Render the final proposal using the exact twelve-section output below. Read [references/architecture-output.md](references/architecture-output.md) for field details and scoring rules.
-11. Read [references/report-contract.md](references/report-contract.md). When the adaptive interview is complete or has exited with explicit assumptions, write the final architecture result and all supporting details to `reports/volcengine-architecture-report.md` (or the caller-requested report path). The report is the source of truth; do not return a completed architecture only in chat without creating the report.
+10. Use `$render-volcengine-architecture` to render the exact twelve-section proposal with the required field details and scoring rules.
+11. Use `$write-volcengine-architecture-report`. When the adaptive interview is complete or has exited with explicit assumptions, write the final architecture result and all supporting details to `reports/volcengine-architecture-report.md` (or the caller-requested report path). The report is the source of truth; do not return a completed architecture only in chat without creating the report.
 12. For the report Markdown deliverable, run:
 
 ```text

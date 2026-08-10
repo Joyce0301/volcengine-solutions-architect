@@ -1,4 +1,13 @@
+---
+name: design-volcengine-database-storage
+description: Design Volcengine database, cache, object-storage, and shared-file architectures. Use for relational or document data, Redis caching, TOS, file semantics, durability, backup, and migration choices.
+---
+
 # Database and Storage
+
+## Standalone invocation
+
+When invoked directly, design only the requested database and storage domain boundary. Separate known facts, assumptions, and architecture-changing gaps; then map each material capability to a canonical product from this skill. For every recommendation include responsibility, rationale, alternative, switch condition, and official discovery URL. Add a retrieval date only after opening that official page during the current task; otherwise mark runtime verification required. Keep unverified dynamic facts unresolved and identify shared compute, network, security, migration, or observability dependencies for other skills.
 
 ## Capability decomposition
 

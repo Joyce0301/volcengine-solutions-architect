@@ -1,7 +1,7 @@
 {
   "name": "volcengine-architecture",
-  "version": "0.2.0",
-  "description": "Evidence-backed Volcengine architecture design for Codex.",
+  "version": "0.3.0",
+  "description": "Composable, evidence-backed Volcengine architecture skills for Codex.",
   "author": {
     "name": "Volcengine Architecture"
   },
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "Volcengine Architecture",
     "shortDescription": "Design evidence-backed Volcengine architectures.",
-    "longDescription": "Design evidence-backed Volcengine architectures in Codex.",
+    "longDescription": "Compose independently callable Volcengine requirements, routing, product, domain-design, and report skills in Codex.",
     "developerName": "Volcengine Architecture",
     "category": "Productivity",
     "capabilities": [],

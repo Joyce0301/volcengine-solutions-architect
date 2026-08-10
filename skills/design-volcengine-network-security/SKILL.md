@@ -1,4 +1,13 @@
+---
+name: design-volcengine-network-security
+description: Design Volcengine network and security architectures. Use for VPC boundaries, load balancing, private connectivity, IAM, KMS, WAF, cloud firewall, encryption, and audit controls.
+---
+
 # Networking and Security
+
+## Standalone invocation
+
+When invoked directly, design only the requested network and security domain boundary. Separate known facts, assumptions, and architecture-changing gaps; then map each material capability to a canonical product from this skill. For every recommendation include responsibility, rationale, alternative, switch condition, and official discovery URL. Add a retrieval date only after opening that official page during the current task; otherwise mark runtime verification required. Keep unverified dynamic facts unresolved and identify shared ingress, compute, data, identity, encryption, or audit dependencies for other skills.
 
 ## Capability decomposition
 

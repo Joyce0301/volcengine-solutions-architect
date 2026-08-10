@@ -1,4 +1,13 @@
+---
+name: render-volcengine-architecture
+description: Render a complete Volcengine architecture into the required twelve-section Markdown structure. Use for logical diagrams, topology, data flows, product mapping, non-functional design, roadmaps, risks, evidence, and readiness scoring.
+---
+
 # Architecture Output Contract
+
+## Standalone invocation
+
+When invoked directly, transform a supplied architecture candidate into the exact report structure below. Preserve facts, assumptions, open items, product names, evidence, and unresolved decisions; do not invent missing research or silently upgrade readiness. If the candidate lacks a required decision, keep the slot explicit and mark the report `NOT READY`.
 
 Produce one self-contained Markdown report whose first visible content is exactly `## Requirements gap check`, followed by the twelve proposal `##` sections below in order. The default report path is `reports/volcengine-architecture-report.md` unless the caller supplies another path. Leading blank lines and HTML comments are ignored by the validator; no title, summary, question, or other visible content may appear before `## Requirements gap check`. Use conditional wording where `ArchitectureBrief.open_questions` or `ArchitectureBrief.assumptions` affects a decision.
 

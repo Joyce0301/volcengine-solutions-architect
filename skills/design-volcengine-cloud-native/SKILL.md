@@ -1,4 +1,13 @@
+---
+name: design-volcengine-cloud-native
+description: Design Volcengine compute and cloud-native architectures. Use for ECS, GPU, containers, functions, elasticity, workload migration, runtime placement, and image delivery decisions.
+---
+
 # Compute and Cloud Native
+
+## Standalone invocation
+
+When invoked directly, design only the requested compute and cloud-native domain boundary. Separate known facts, assumptions, and architecture-changing gaps; then map each material capability to a canonical product from this skill. For every recommendation include responsibility, rationale, alternative, switch condition, and official discovery URL. Add a retrieval date only after opening that official page during the current task; otherwise mark runtime verification required. Keep unverified dynamic facts unresolved and identify shared data, network, security, or observability dependencies for other skills.
 
 ## Capability decomposition
 

@@ -1,4 +1,22 @@
+---
+name: interview-volcengine-requirements
+description: Interview users one question at a time to turn incomplete business needs into an architecture-ready Volcengine brief. Use for requirements discovery, architecture-changing gap analysis, safe defaults, assumptions, and switch conditions.
+---
+
 # Intake Contract
+
+## Standalone invocation
+
+When invoked directly, begin every response with this visible structure:
+
+```text
+## Requirements gap check
+Known facts
+Architecture-changing gaps
+Assumptions if unanswered
+```
+
+If an architecture-changing gap remains, ask exactly one highest-impact question after the block and do not produce an architecture proposal. If the request is sufficient or the user exits with defaults, return the normalized `ArchitectureBrief` and explicit assumption/switch-condition pairs for handoff.
 
 ## ArchitectureBrief
 

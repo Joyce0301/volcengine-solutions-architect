@@ -1,4 +1,13 @@
+---
+name: route-volcengine-architecture
+description: Classify a Volcengine architecture request by scenario, quality, constraint, product family, and review roles. Use when deciding which Volcengine domain skills or independent reviews a solution needs.
+---
+
 # Routing Matrix
+
+## Standalone invocation
+
+When invoked directly, consume the supplied requirements or `ArchitectureBrief`, identify only supported labels, and return the fenced `routing:` record defined below. Explain each selected label in one concise rationale. Preserve consequential uncertainty as an open item; do not select products or write the final architecture.
 
 ## Labels
 

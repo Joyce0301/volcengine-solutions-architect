@@ -6,7 +6,8 @@ import re
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILL = ROOT / "volcengine-architecture" / "skills" / "design-volcengine-architecture"
+SKILLS = ROOT / "skills"
+SKILL = SKILLS / "design-volcengine-architecture"
 VALIDATOR_PATH = SKILL / "scripts" / "validate-deliverable.py"
 
 validator_spec = importlib.util.spec_from_file_location("adaptive_validator", VALIDATOR_PATH)
@@ -18,10 +19,10 @@ class AdaptiveInterviewContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.skill_text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
-        cls.intake_text = (SKILL / "references" / "intake-contract.md").read_text(
+        cls.intake_text = (SKILLS / "interview-volcengine-requirements" / "SKILL.md").read_text(
             encoding="utf-8"
         )
-        cls.output_text = (SKILL / "references" / "architecture-output.md").read_text(
+        cls.output_text = (SKILLS / "render-volcengine-architecture" / "SKILL.md").read_text(
             encoding="utf-8"
         )
 
@@ -49,11 +50,13 @@ class AdaptiveInterviewContractTests(unittest.TestCase):
 
     def test_product_registry_matches_domain_reference_names(self):
         registry = json.loads(
-            (SKILL / "references" / "product-registry.json").read_text(encoding="utf-8")
+            (SKILLS / "select-volcengine-products" / "product-registry.json").read_text(
+                encoding="utf-8"
+            )
         )
         registry_names = {product["name"] for product in registry["products"]}
         reference_names = set()
-        for reference in (SKILL / "references").glob("*.md"):
+        for reference in SKILLS.glob("design-volcengine-*/SKILL.md"):
             reference_names.update(
                 match.group(1).strip()
                 for match in re.finditer(

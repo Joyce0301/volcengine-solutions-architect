@@ -1,10 +1,19 @@
+---
+name: coordinate-volcengine-architecture-roles
+description: Coordinate structured requirements, product research, domain architecture, security-reliability, and FinOps review roles for a Volcengine architecture. Use when multiple independent analysis roles must return compatible evidence and decisions.
+---
+
 # Subagent Contracts
+
+## Standalone invocation
+
+When invoked directly, choose only the roles justified by the supplied routing labels, execute them in parallel when independent and available or serially otherwise, and return their structured findings in the shared envelope below. Reconcile disagreements explicitly, but do not replace the main architecture skill as owner of the final report.
 
 All roles consume and return platform-neutral structured analysis. The main Skill alone reconciles results and composes the final user answer. Subagents must not compose the final user answer, make unsupported product claims, or silently convert uncertainties into facts.
 
 ## Shared envelope
 
-Every role uses this required envelope. `brief` is the `ArchitectureBrief` defined in `intake-contract.md`.
+Every role uses this required envelope. `brief` is the `ArchitectureBrief` defined by `$interview-volcengine-requirements`.
 
 ```yaml
 request:

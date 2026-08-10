@@ -5,7 +5,6 @@ import unittest
 
 VALIDATOR_PATH = (
     Path(__file__).parents[1]
-    / "volcengine-architecture"
     / "skills"
     / "design-volcengine-architecture"
     / "scripts"

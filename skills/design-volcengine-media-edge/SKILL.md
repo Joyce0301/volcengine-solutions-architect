@@ -1,4 +1,13 @@
+---
+name: design-volcengine-media-edge
+description: Design Volcengine media delivery, live video, video-on-demand, real-time audio/video, image, moderation, CDN, DNS traffic routing, and edge-compute architectures.
+---
+
 # Media and Edge
+
+## Standalone invocation
+
+When invoked directly, design only the requested media and edge domain boundary. Separate known facts, assumptions, and architecture-changing gaps; then map each material capability to a canonical product from this skill. For every recommendation include responsibility, rationale, alternative, switch condition, and official discovery URL. Add a retrieval date only after opening that official page during the current task; otherwise mark runtime verification required. Keep unverified dynamic facts unresolved and identify shared storage, compute, network, security, or moderation dependencies for other skills.
 
 ## Capability decomposition
 
